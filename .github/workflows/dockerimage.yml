@@ -19,11 +19,13 @@ jobs:
     - name: Build all core libs
       run: |
         git submodule update --init
-        cd event_horizon && ./build_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} core
-        cd event_horizon && ./build_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} database
+        cd event_horizon 
+        ./build_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} core
+        ./build_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} database
     - name: Build asset_daemon
       run: |
-        ./event_horizon/build_native_tool.sh ${{ secrets.DOCKER_HUB_ID }} asset_daemon
+        cd event_horizon 
+        ./build_native_tool.sh ${{ secrets.DOCKER_HUB_ID }} asset_daemon
     - name: Build NGINX
       run: docker build -t ${{ secrets.DOCKER_HUB_ID }}/nginx ./event_horizon/nginx      
     - name: Build restful-api
@@ -38,8 +40,9 @@ jobs:
               
     - name: Docker Push all core-libs
       run: |
-        ./event_horizon/publish_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} core
-        ./event_horizon/publish_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} database
+        cd event_horizon 
+        ./publish_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} core
+        ./publish_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} database
     - name: Docker Push asset_daemon
       run: |
         docker push ${{ secrets.DOCKER_HUB_ID }}/asset_daemon
