@@ -13,3 +13,5 @@ http-client.private.env.json
 
 /public/editor.js
 /public/editor.wasm
+
+cmake-build-*
