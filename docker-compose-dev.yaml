@@ -4,7 +4,7 @@ services:
     restart: always
     build:
       dockerfile: Dockerfile.dev
-      context: ./eventh_horizon/nginx
+      context: ./event_horizon/nginx
     ports:
       - "80:80"
       - "443:443"
@@ -14,10 +14,10 @@ services:
   restful-api:
     build:
       dockerfile: Dockerfile.dev
-      context: ./eventh_horizon/restful-api
+      context: ./event_horizon/restful-api
     volumes:
       - /app/node_modules
-      - ./eventh_horizon/restful-api:/app
+      - ./event_horizon/restful-api:/app
     environment:
       - EH_MONGO_PATH=${EH_MONGO_PATH} 
       - EH_MONGO_DEFAULT_DB=${EH_MONGO_DEFAULT_DB}
@@ -38,7 +38,7 @@ services:
   asset_daemon:
     build:
       dockerfile: dockerfile-asset_daemon
-      context: ./eventh_horizon/native
+      context: ./event_horizon/native
     container_name: "asset-daemon-dev"
     restart: always
     ports:
