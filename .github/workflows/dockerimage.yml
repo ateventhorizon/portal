@@ -18,7 +18,7 @@ jobs:
     
     - name: Build all core libs
       run: |
-        cd event_horizon && git submodule init
+        git submodule init
         ./event_horizon/build_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} core
         ./event_horizon/build_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} database
     - name: Build asset_daemon
