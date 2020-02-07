@@ -22,7 +22,7 @@ jobs:
         ./event_horizon/build_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} database
     - name: Build asset_daemon
       run: |
-        ./build_native_tool.sh ${{ secrets.DOCKER_HUB_ID }} asset_daemon
+        ./event_horizon/build_native_tool.sh ${{ secrets.DOCKER_HUB_ID }} asset_daemon
     - name: Build NGINX
       run: docker build -t ${{ secrets.DOCKER_HUB_ID }}/nginx ./event_horizon/nginx      
     - name: Build restful-api
