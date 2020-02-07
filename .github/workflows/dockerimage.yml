@@ -16,44 +16,14 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.SECRET_PRIVATE_DEPLOY_KEY }}
     
-    - name: Build all core libs
-      run: |
-        git submodule update --init
-        cd event_horizon 
-        ./build_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} core
-        ./build_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} database
-    - name: Build asset_daemon
-      run: |
-        cd event_horizon 
-        ./build_native_tool.sh ${{ secrets.DOCKER_HUB_ID }} asset_daemon
-    - name: Build NGINX
-      run: docker build -t ${{ secrets.DOCKER_HUB_ID }}/nginx ./event_horizon/nginx      
-    - name: Build restful-api
-      run: docker build -t ${{ secrets.DOCKER_HUB_ID }}/restful-api ./event_horizon/restful-api
     - name: Build portal
       run: docker build -t ${{ secrets.DOCKER_HUB_ID }}/portal --build-arg REACT_APP_EH_CLOUD_HOST_ARG=${{ secrets.EH_CLOUD_HOST }} ./projects/main
-    - name: Build rsinitiate
-      run: docker build -t ${{ secrets.DOCKER_HUB_ID }}/mongo-rsinitiate ./event_horizon/mongo
 
     - name: Docker hub login
       run: echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_ID }} --password-stdin
               
-    - name: Docker Push all core-libs
-      run: |
-        cd event_horizon 
-        ./publish_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} core
-        ./publish_native_lib.sh ${{ secrets.DOCKER_HUB_ID }} database
-    - name: Docker Push asset_daemon
-      run: |
-        docker push ${{ secrets.DOCKER_HUB_ID }}/asset_daemon
-    - name: Docker Push NGINX
-      run: docker push ${{ secrets.DOCKER_HUB_ID }}/nginx
-    - name: Docker Push restful-api
-      run: docker push ${{ secrets.DOCKER_HUB_ID }}/restful-api
     - name: Docker Push portal
       run: docker push ${{ secrets.DOCKER_HUB_ID }}/portal
-    - name: Docker Push rsinitiate
-      run: docker push ${{ secrets.DOCKER_HUB_ID }}/mongo-rsinitiate
 
     - name: Copy deploy script via scp.
       run: scp -oStrictHostKeyChecking=no ${{ github.workspace }}/deploy/docker-compose/docker-compose.yml ${{ secrets.DROPLET_USER}}@${{ secrets.DROPLET_IP }}:/
