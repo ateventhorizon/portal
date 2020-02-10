@@ -27,7 +27,7 @@ services:
       - mongo2
       - mongo3
   portal:
-    image: "ateventhorizon/portal"
+    image: "eventhorizonprojects/${EH_CLOUD_HOST}"
     container_name: "portal"
   asset_daemon:
     image: "ateventhorizon/asset_daemon"
