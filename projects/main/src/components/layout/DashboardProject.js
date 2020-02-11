@@ -1,6 +1,5 @@
-import React, {Fragment, useEffect} from "react";
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
+import React from "react";
+import {useDispatch, useSelector} from "react-redux";
 import Entries from "./entities/Entries";
 import ImageEditor from "./entities/ImageEditor";
 import AppEditor from "./entities/AppEditor";
@@ -20,8 +19,7 @@ import {
   GroupScript,
   GroupUI
 } from "../../utils/utils";
-
-import store from "../../store";
+import {createPlaceHolder, getFullEntity} from "../../actions/entities";
 
 const containerClassFromGroup = (currEntity, group) => {
   switch (group) {
@@ -63,88 +61,66 @@ const containerClassFromGroup = (currEntity, group) => {
   }
 };
 
-const DashboardProject = ({
-                            resize,
-                            currentEntity,
-                            entities,
-                            group,
-                            userData
-                          }) => {
-  let canvasContainer = React.useRef(null);
+const DashboardProject = () => {
+    let canvasContainer = React.useRef(null);
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    // Shortcut to go straight to app/coding from the outset for most projects
-    // if (group === "" && entities.length === 1 && !currentEntity) {
-    //   store.dispatch(getFullEntity(entities[0]));
-    // }
-    store.dispatch(
-      wasmSetCanvasVisibility(
-        currentEntity && group !== "" ? "visible" : "hidden"
-      )
+    const currentEntity = useSelector(state => state.entities.currentEntity);
+    const entities = useSelector(state => state.entities.entries);
+    const group = useSelector(state => state.entities.groupSelected);
+
+    if (group === GroupScript) {
+      if (entities.length >= 1 && !currentEntity) {
+        dispatch(getFullEntity(entities[0]));
+      } else if (!currentEntity) {
+        dispatch(createPlaceHolder(group));
+      }
+    }
+    dispatch(wasmSetCanvasVisibility('visible'));
+
+    // useEffect(() => {
+    //   // Shortcut to go straight to app/coding from the outset for most projects
+    //   console.log("Invalidate: dashboard project");
+    // }, [currentEntity, entities, group, dispatch]);
+
+    const {mainContainerClass, mainContainerDiv} = containerClassFromGroup(
+      currentEntity,
+      group
     );
-    console.log("Invalidate: dashboard project");
-  }, [currentEntity, entities, group]);
 
-  if (!userData || !userData.project) {
-    return <Fragment></Fragment>;
-  }
+// const bUseEntityUpdate = groupHasUpdateFacility(currentEntity, group);
+    const bShowMetaSection = groupHasMetadataSection(currentEntity, group);
 
-  const {mainContainerClass, mainContainerDiv} = containerClassFromGroup(
-    currentEntity,
-    group
-  );
+    if (canvasContainer.current) {
+      const rect = canvasContainer.current.getBoundingClientRect();
+      dispatch(wasmSetCanvasSize(rect));
+    }
 
-  // const bUseEntityUpdate = groupHasUpdateFacility(currentEntity, group);
-  const bShowMetaSection = groupHasMetadataSection(currentEntity, group);
-
-  if (canvasContainer.current) {
-    const rect = canvasContainer.current.getBoundingClientRect();
-    store.dispatch(wasmSetCanvasSize(rect));
-  }
-
-  const entityName = (
-    <div className="source_tabs-a">
-      <div className="source_tabs-internal">
-        {currentEntity && currentEntity.entity.name}
+    const entityName = (
+      <div className="source_tabs-a">
+        <div className="source_tabs-internal">
+          {currentEntity && currentEntity.entity.name}
+        </div>
       </div>
-    </div>
-  );
+    );
 
-  const mainEditorDiv = (
-    <div className={mainContainerClass}>
-      {entityName}
-      <RenderParamsToolbar/>
-      <div className="EntryEditorRender" ref={canvasContainer}></div>
-      {currentEntity && mainContainerDiv}
-      {bShowMetaSection && <EntityMetaSection/>}
-    </div>
-  );
+    const mainEditorDiv = (
+      <div className={mainContainerClass}>
+        {entityName}
+        <RenderParamsToolbar/>
+        <div className="EntryEditorRender" ref={canvasContainer}></div>
+        {currentEntity && mainContainerDiv}
+        {bShowMetaSection && <EntityMetaSection/>}
+      </div>
+    );
 
-  return (
-    <div className="dashboardContainer">
-      <Entries cname="thumbs-a thumbsEntityArea"/>
-      <div className="editor-a">{mainEditorDiv}</div>
-    </div>
-  );
-};
+    return (
+      <div className="dashboardContainer">
+        <Entries cname="thumbs-a thumbsEntityArea"/>
+        <div className="editor-a">{mainEditorDiv}</div>
+      </div>
+    );
+  }
+;
 
-DashboardProject.propTypes = {
-  resize: PropTypes.bool,
-  currentEntity: PropTypes.object,
-  entities: PropTypes.array,
-  group: PropTypes.string,
-  userData: PropTypes.object
-};
-
-const mapStateToProps = state => ({
-  resize: state.wasm.resize,
-  currentEntity: state.entities.currentEntity,
-  entities: state.entities.entries,
-  group: state.entities.group,
-  userData: state.auth.userdata
-});
-
-export default connect(
-  mapStateToProps,
-  {}
-)(DashboardProject);
+export default DashboardProject;

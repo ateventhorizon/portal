@@ -237,6 +237,22 @@ export const wasmClientFinishedLoadingData = data => dispatch => {
   });
 };
 
+export const createPlaceHolder = (group) => async dispatch => {
+  try {
+    const fullData = await axios.post(`/api/entities/placeholder/${group}`);
+    dispatch({
+      type: GET_ENTITY,
+      payload: {entity: fullData.data},
+    });
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: ENTITY_ERROR,
+      payload: {msg: err.response}
+    });
+  }
+}
+
 // Get entity
 export const getFullEntity = entitySource => async dispatch => {
   try {
