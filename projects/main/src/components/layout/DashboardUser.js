@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import {
   SplitButton,
   Dropdown,
@@ -18,6 +18,7 @@ import {
   logout
 } from "../../actions/auth";
 import LocalAlert from "./LocalAlert";
+import {wasmSetCanvasVisibility} from "react-wasm-canvas";
 
 const DashboardUser = ({
   userstate,
@@ -29,6 +30,10 @@ const DashboardUser = ({
   sendInvitationToProject,
   logout
 }) => {
+
+  const dispatch = useDispatch();
+  dispatch(wasmSetCanvasVisibility('hidden'));
+
   let inviteNameRef = React.useRef(null);
 
   const [newProjectformData, setNewProjectformData] = useState({

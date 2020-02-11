@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import Entries from "./entities/Entries";
 import ImageEditor from "./entities/ImageEditor";
@@ -68,6 +68,15 @@ const DashboardProject = () => {
     const currentEntity = useSelector(state => state.entities.currentEntity);
     const entities = useSelector(state => state.entities.entries);
     const group = useSelector(state => state.entities.groupSelected);
+    const hasResized = useSelector(state => state.wasm.resize);
+
+    useEffect(() => {
+      if (canvasContainer.current) {
+        const rect = canvasContainer.current.getBoundingClientRect();
+        dispatch(wasmSetCanvasSize(rect));
+      }
+    }, [hasResized, dispatch]);
+    dispatch(wasmSetCanvasVisibility('visible'));
 
     if (group === GroupScript) {
       if (entities.length >= 1 && !currentEntity) {
@@ -76,12 +85,6 @@ const DashboardProject = () => {
         dispatch(createPlaceHolder(group));
       }
     }
-    dispatch(wasmSetCanvasVisibility('visible'));
-
-    // useEffect(() => {
-    //   // Shortcut to go straight to app/coding from the outset for most projects
-    //   console.log("Invalidate: dashboard project");
-    // }, [currentEntity, entities, group, dispatch]);
 
     const {mainContainerClass, mainContainerDiv} = containerClassFromGroup(
       currentEntity,
@@ -90,11 +93,6 @@ const DashboardProject = () => {
 
 // const bUseEntityUpdate = groupHasUpdateFacility(currentEntity, group);
     const bShowMetaSection = groupHasMetadataSection(currentEntity, group);
-
-    if (canvasContainer.current) {
-      const rect = canvasContainer.current.getBoundingClientRect();
-      dispatch(wasmSetCanvasSize(rect));
-    }
 
     const entityName = (
       <div className="source_tabs-a">

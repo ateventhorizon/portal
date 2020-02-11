@@ -31,7 +31,7 @@ const AppEditor = ({ currentEntity, userData, wasmLogs, wasmOutputDirty }) => {
         filesFromDb.some(fileFromDb => {
           if (
             fileFromDb.project === userData.project &&
-            fileFromDb.file === currentEntity.entity.metadata.name &&
+            fileFromDb.file === currentEntity.entity.name &&
             fileFromDb.user === userData.user.email
           ) {
             setFileData(fileFromDb);
@@ -72,7 +72,7 @@ const AppEditor = ({ currentEntity, userData, wasmLogs, wasmOutputDirty }) => {
       add({
         project: userData.project,
         app: currentEntity.entity.mKey,
-        file: currentEntity.entity.metadata.name,
+        file: currentEntity.entity.name,
         user: userData.user.email,
         content: fileC
       }).then(
@@ -81,7 +81,7 @@ const AppEditor = ({ currentEntity, userData, wasmLogs, wasmOutputDirty }) => {
             id: event,
             project: userData.project,
             app: currentEntity.entity.mKey,
-            file: currentEntity.entity.metadata.name,
+            file: currentEntity.entity.name,
             user: userData.user.email,
             content: fileC
           };
