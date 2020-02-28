@@ -23,7 +23,8 @@ initDB(DBConfig);
 
 const App = () => {
 
-  let wasmArgumentList = [`hostname=www.${process.env.REACT_APP_EH_CLOUD_HOST}`];
+  const wwwPrefixToAvoidSSLMadness = process.env.REACT_APP_EH_CLOUD_HOST === 'localhost' ? "" : "www.";
+  let wasmArgumentList = [`hostname=${wwwPrefixToAvoidSSLMadness}${process.env.REACT_APP_EH_CLOUD_HOST}`];
 
   useEffect(() => {
     store.dispatch(loadUser());
