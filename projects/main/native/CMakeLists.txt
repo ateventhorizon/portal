@@ -3,6 +3,7 @@ include(../../../event_horizon/native/CMakeLists.txt NO_POLICY_SCOPE)
 project(editor)
 
 set(BUILD_FROM_SOURCE TRUE)
+#set(_USE_IMGUI_ TRUE)
 compile( core lua graphics poly render_scene_graph converters )
 compile_local( editor )
 

@@ -17,6 +17,7 @@
 #include <graphics/lightmap_manager.hpp>
 #include <graphics/render_light_manager.h>
 #include <graphics/shader_manager.h>
+#include <graphics/imgui/imgui.h>
 
 scene_t scene{ 0 };
 
@@ -78,7 +79,8 @@ void EditorBackEnd::activateImpl() {
 //    sg.addGeomScene( "daybed");
 //    sg.addGeomScene( "clock");
 //    sg.addGeomScene( "8479");
-//    sg.addGeomScene( "objexp");
+//    sg.addGeomScene( "frosta");
+//    sg.loadAsset( "frosta");
 //    sg.loadAsset( "Nightstand" );
 
 //    sg.load<Geom>( "vitra", [this](HttpResouceCBSign key) {
@@ -100,4 +102,14 @@ void EditorBackEnd::updateImpl( const AggregatedInputData& _aid ) {
         LightmapManager::bake( &scene, rsg.RR());
         LightmapManager::apply( scene, rsg.RR());
     }
+
+#ifdef _USE_IMGUI_
+    ImGui::Begin( "SceneGraph" );
+        for ( const auto& node : sg.Nodes() ) {
+            ImGui::Text( "%s", node.second->Name().c_str() );
+        }
+    ImGui::End();
+
+#endif
+
 }
