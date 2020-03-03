@@ -41,7 +41,8 @@ void EditorBackEnd::activatePostLoad() {
     rsg.useSkybox( true );
     rsg.useSunLighting( false );
     rsg.useSSAO(true);
-    rsg.RR().LM()->setShadowZFightCofficient(0.02f);
+//    rsg.addPointLight( V3f::Y_AXIS, 50.0f, 1.0f);
+    rsg.RR().LM()->setShadowZFightCofficient(0.002f);
     rsg.RR().LM()->setIndoorSceneCoeff(1.0f);
     rsg.changeTime( "summer 13:50" );
     rsg.setRigCameraController<CameraControlOrbit3d>();
