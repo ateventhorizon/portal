@@ -514,6 +514,7 @@ input#search-bar:hover {
   margin: 0.33rem 0 0.33rem 0.33rem;
   padding: 0.33rem;
   overflow: auto;
+  width: 100%;
   background-image: linear-gradient(
     rgba(50, 118, 248, 0.1),
     rgba(41, 166, 244, 0.1)
@@ -743,34 +744,51 @@ input#search-bar:hover {
 }
 
 .entity-info-c {
+  display: grid;
   border: 1px solid #d1d1d140;
   border-radius: 4px;
   cursor: text;
-  margin: 0.5rem 0px;
   padding: 5px 5px;
-  overflow: auto;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+  grid-template-columns: 10% 40% calc(50% - 5px);
+  grid-template-rows: repeat(4, 1.2em);
+  grid-template-areas:
+          "ei-icon ei-title ei-value"
+          "ei-icon ei-title ei-value"
+          "ei-icon ei-title ei-value"
+          "ei-icon ei-title ei-value";
+  grid-gap: 0px 0px;
+  align-items: center;
+
+}
+
+.text-clip {
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.ei-icon-a {
+  grid-area: ei-icon;
+}
+
+.ei-title-a {
+  grid-area: ei-title;
+}
+
+.ei-value-a {
+  grid-area: ei-value;
+  overflow: hidden;
+  text-overflow: clip;
 }
 
 .deleteentity-a {
   grid-area: deleteentity;
   justify-self: end;
   align-self: center;
-}
-
-.metaInfiTitle {
-  position: absolute;
-}
-
-.metaInfoValue {
-  position: absolute;
-  padding-left: 65px;
-  margin-top: -0.03rem;
-}
-
-.metaInfoValueNoOff {
-  position: absolute;
-  padding-left: 65px;
-  margin-top: 2px;
 }
 
 .GeomEditorRenderGrid {
@@ -1246,8 +1264,9 @@ li.app_controls-a {
   transform: translate(-50%, -50%);
   opacity: 0.9;
   background: var(--light-color);
-  color: #333;
+  /*color: #333;*/
   z-index: 100000;
+  width: 50%
 }
 
 .fullline {

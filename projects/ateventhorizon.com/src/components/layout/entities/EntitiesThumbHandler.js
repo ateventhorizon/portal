@@ -70,7 +70,7 @@ const EntitiesThumbHandler = (props) => {
             <span className="text-pale">
               <i className="fas fa-user-tag" />{" "}
             </span>
-            <span className="text-secondary">
+            <span className="text-secondary-alt">
               {entry.creator
                 ? entry.creator.name
                 : entry.project}

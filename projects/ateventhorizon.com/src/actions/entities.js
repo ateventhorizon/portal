@@ -1,8 +1,6 @@
 import axios from "axios";
-import {setAlert} from "./alert";
 import {
   CHANGE_MATERIAL_COLOR,
-  DELETE_ENTITY,
   ENTITIES_PARTIAL_SEARCH_ERROR,
   ENTITY_ERROR,
   GET_ENTITIES,
@@ -338,27 +336,6 @@ export const addTagsToEntity = (id, tags) => async dispatch => {
     dispatch({
       type: ENTITY_ERROR,
       payload: {msg: err.response, status: err.response}
-    });
-  }
-};
-
-export const deleteEntity = id => async dispatch => {
-  try {
-    await axios.delete(`/entities/${id}`);
-
-    dispatch({
-      type: DELETE_ENTITY,
-      payload: id
-    });
-
-    dispatch(
-      setAlert("Asset deleted, hope you are not going to regret it!", "success")
-    );
-  } catch (err) {
-    console.log(err);
-    dispatch({
-      type: ENTITY_ERROR,
-      payload: {msg: err.response}
     });
   }
 };

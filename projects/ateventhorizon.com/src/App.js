@@ -17,9 +17,16 @@ import { loadUser } from "./actions/auth";
 
 import "./App.css";
 import WasmCanvas from "react-wasm-canvas";
+import {setGlobal} from "reactn";
 
 initHostEnv();
 initDB(DBConfig);
+
+setGlobal( {
+  alert: {},
+  confirmAlert: {},
+  currEntity: {}
+});
 
 const App = () => {
 

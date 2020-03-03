@@ -52,7 +52,7 @@ export const wscConnect = session => {
     if ( mdata.msg.startsWith("EntityAdded") ) {
       const state = store.getState();
       const entity = mdata.data.fullDocument;
-      if (state.entities.groupSelected === entity.group) {
+      if ( entity && state.entities.groupSelected === entity.group) {
           store.dispatch({type: ADD_ENTITY, payload: entity});
           store.dispatch(getFullEntity(entity));
       }
