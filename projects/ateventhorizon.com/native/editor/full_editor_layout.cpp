@@ -18,6 +18,7 @@
 #include <graphics/render_light_manager.h>
 #include <graphics/shader_manager.h>
 #include <graphics/imgui/imgui.h>
+#include "im_gui_console.h"
 
 scene_t scene{ 0 };
 
@@ -37,16 +38,16 @@ void EditorBackEnd::activatePostLoad() {
 //    rsg.createSkybox( SkyBoxInitParams{ SkyBoxMode::EquirectangularTexture,
 //                                        sg.getHash<RawImage>( skyboxName ) } );
 
-    Renderer::clearColor(C4f::WHITE);
+    Renderer::clearColor( C4f::WHITE );
     rsg.useSkybox( true );
     rsg.useSunLighting( false );
-    rsg.useSSAO(true);
+    rsg.useSSAO( true );
 //    rsg.addPointLight( V3f::Y_AXIS, 50.0f, 1.0f);
-    rsg.RR().LM()->setShadowZFightCofficient(0.002f);
-    rsg.RR().LM()->setIndoorSceneCoeff(1.0f);
+    rsg.RR().LM()->setShadowZFightCofficient( 0.002f );
+    rsg.RR().LM()->setIndoorSceneCoeff( 1.0f );
     rsg.changeTime( "summer 13:50" );
     rsg.setRigCameraController<CameraControlOrbit3d>();
-    rsg.DC()->setFoV(60.0f);
+    rsg.DC()->setFoV( 60.0f );
 }
 
 void EditorBackEnd::activateImpl() {
@@ -95,7 +96,7 @@ void EditorBackEnd::activateImpl() {
 //    rsg.RR().drawRect2d( CommandBufferLimits::UI2dStart, V2f{0.03f, 0.96f}, V2f{ 0.03f * 0.02f, 0.98f}, C4f::GREEN  );
 }
 
-void EditorBackEnd::updateImpl( const AggregatedInputData& _aid ) {
+void EditorBackEnd::updateImpl( const AggregatedInputData &_aid ) {
 
     if ( _aid.TI().checkKeyToggleOn( GMK_Z )) {
         sg.chartMeshes2( scene );
@@ -106,11 +107,12 @@ void EditorBackEnd::updateImpl( const AggregatedInputData& _aid ) {
 
 #ifdef _USE_IMGUI_
     ImGui::Begin( "SceneGraph" );
-        for ( const auto& node : sg.Nodes() ) {
-            ImGui::Text( "%s", node.second->Name().c_str() );
-        }
+    for ( const auto &node : sg.Nodes()) {
+        ImGui::Text( "%s", node.second->Name().c_str());
+    }
     ImGui::End();
 
+    ImGuiLuaConsole( rsg );
 #endif
 
 }
