@@ -30,6 +30,7 @@ const AlertContainer = () => {
       </Modal>)
   }
 
+
   // if (alerts !== null && alerts.length > 0) {
   //     const alert = alerts[0];
   //

@@ -26,7 +26,7 @@
     "react-tag-autocomplete": "^5.11.2",
     "react-transition-group": "^4.3.0",
     "react-treebeard": "^3.2.4",
-    "react-wasm-canvas": "^1.0.0",
+    "react-wasm-canvas": "^1.0.1",
     "react-zlib-js": "^1.0.4",
     "reactn": "^2.2.6",
     "reactn-devtools": "^1.1.0",

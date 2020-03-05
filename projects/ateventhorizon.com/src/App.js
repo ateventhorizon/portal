@@ -17,6 +17,7 @@ import { loadUser } from "./actions/auth";
 
 import "./App.css";
 import WasmCanvas from "react-wasm-canvas";
+// import WasmCanvas from "./localwasm";
 import {setGlobal} from "reactn";
 
 initHostEnv();
