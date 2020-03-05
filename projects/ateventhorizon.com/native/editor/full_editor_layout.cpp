@@ -98,18 +98,18 @@ void EditorBackEnd::activateImpl() {
 
 void EditorBackEnd::updateImpl( const AggregatedInputData &_aid ) {
 
-    if ( _aid.TI().checkKeyToggleOn( GMK_Z )) {
-        sg.chartMeshes2( scene );
-        LightmapManager::initScene( &scene, rsg.RR());
-        LightmapManager::bake( &scene, rsg.RR());
-        LightmapManager::apply( scene, rsg.RR());
-    }
+//    if ( _aid.TI().checkKeyToggleOn( GMK_Z )) {
+//        sg.chartMeshes2( scene );
+//        LightmapManager::initScene( &scene, rsg.RR());
+//        LightmapManager::bake( &scene, rsg.RR());
+//        LightmapManager::apply( scene, rsg.RR());
+//    }
 
 #ifdef _USE_IMGUI_
     ImGui::Begin( "SceneGraph" );
-    for ( const auto &node : sg.Nodes()) {
-        ImGui::Text( "%s", node.second->Name().c_str());
-    }
+    sg.visitNodes( []( const GeomSPConst elem) {
+        ImGui::Text( "%s", elem->Name().c_str());
+    });
     ImGui::End();
 
     ImGuiLuaConsole( rsg );
