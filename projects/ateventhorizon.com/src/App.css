@@ -1262,16 +1262,7 @@ li.app_controls-a {
 }
 
 .alert {
-  padding: 0.8rem;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.9;
-  background: var(--light-color);
-  /*color: #333;*/
-  z-index: 100000;
-  width: 50%
+  top: var(--navbar-height);
 }
 
 .fullline {
@@ -1357,12 +1348,6 @@ li.app_controls-a {
   background: #fff;
   color: #333;
   border: #ccc solid 1px;
-}
-
-.alert-warning {
-  background: var(--warning);
-  color: saddlebrown;
-  border: saddlebrown solid 1px;
 }
 
 .btn:hover {

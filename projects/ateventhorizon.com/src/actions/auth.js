@@ -1,15 +1,14 @@
-import { setAlert } from "./alert";
-import { setLocalAlert } from "./localalert";
+import {setAlert} from "./alert";
 import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  USER_LOADED,
   AUTH_ERROR,
   CLEAR_ENTITIES,
-  LOGOFF_FROM_PROJECT,
-  LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGOUT
+  LOGIN_SUCCESS,
+  LOGOFF_FROM_PROJECT,
+  LOGOUT,
+  REGISTER_FAIL,
+  REGISTER_SUCCESS,
+  USER_LOADED
 } from "./types";
 import axios from "axios";
 
@@ -224,32 +223,30 @@ export const declineInvitation = (projectName, userEmail) => async dispatch => {
   }
 };
 
-export const setCurrentProject = projectName => async dispatch => {
-  try {
+export const setCurrentProject = async projectName => {
+  // try {
     // Make sure we re-login with project set, otherwise most of the entity rest api req will fail
-    const res = await axios.post("/api/refreshtoken/" + projectName);
+    return await axios.post("/api/refreshtoken/" + projectName);
 
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: res.data
-    });
-
-    dispatch(loadUser());
-  } catch (err) {
-    console.log("craete project error: ", err);
-    dispatch({
-      type: LOGIN_FAIL
-    });
-    dispatch(setAlert("Cannot login to new project", "danger"));
-  }
+    // dispatch({
+    //   type: LOGIN_SUCCESS,
+    //   payload: res.data
+    // });
+    //
+  // } catch (err) {
+  //   console.log("login project error: ", err);
+  //   // dispatch({
+  //   //   type: LOGIN_FAIL
+  //   // });
+  //   // dispatch(setAlert("Cannot login to new project", "danger"));
+  // }
 };
 
-export const sendInvitationToProject = (
+export const sendInvitationToProject = async (
   adminuser,
   project,
   personToAdd
-) => async dispatch => {
-  try {
+) => {
     const config = {
       headers: {
         "Content-Type": "application/json"
@@ -262,14 +259,5 @@ export const sendInvitationToProject = (
       persontoadd: personToAdd
     };
 
-    const res = await axios.put("/api/user/invitetoproject", body, config);
-    console.log(res);
-    dispatch(
-      setLocalAlert(res.data.msg, res.data.code === 200 ? "success" : "danger")
-    );
-  } catch (ex) {
-    dispatch(
-      setLocalAlert("Server responded 400, it means it's bonker :'(", "danger")
-    );
-  }
+    return await axios.put("/api/user/invitetoproject", body, config);
 };

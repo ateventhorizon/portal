@@ -31,7 +31,7 @@ const Login = ({ login, isAuthenticated, user }) => {
   return (
     <Fragment>
       <section className="container">
-        <h1 className="large text-primary">
+        <h1 className="large text-success">
           <br />
           Login
         </h1>
@@ -60,19 +60,10 @@ const Login = ({ login, isAuthenticated, user }) => {
               minLength="6"
             />
           </div>
-          <div className="form-group">
-            <input
-              type="text"
-              placeholder="Project"
-              name="project"
-              value={project}
-              onChange={e => onChange(e)}
-            />
-          </div>
-          <input type="submit" className="btn btn-primary" value="Login" />
+          <input type="submit" className="btn btn-success" value="Login" />
         </form>
         <p className="my-3">
-          Don't have an account? <Link to="/register">Sign Up</Link>
+          Don't have an account? <Link to="/register"><span className="text-info">Sign Up</span></Link>
         </p>
       </section>
     </Fragment>

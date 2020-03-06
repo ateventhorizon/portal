@@ -26,6 +26,7 @@ initDB(DBConfig);
 setGlobal({
   alert: {},
   confirmAlert: {},
+  notificationAlert: {},
   currEntity: {}
 });
 

@@ -2,11 +2,13 @@ import React, {Fragment} from "react";
 import {useGlobal} from 'reactn';
 import Button from 'react-bootstrap/Button'
 import Modal from "react-bootstrap/Modal";
+import Alert from "react-bootstrap/Alert";
 
 const AlertContainer = () => {
 
 // eslint-disable-next-line
   const [confirmAlert, setConfirmAlert] = useGlobal('confirmAlert');
+  const [notificationAlert, setNotificationAlert] = useGlobal('notificationAlert');
 
   if (confirmAlert.show === true) {
     return (
@@ -30,6 +32,17 @@ const AlertContainer = () => {
       </Modal>)
   }
 
+  if (notificationAlert.show === true) {
+    return (
+      <Alert key={notificationAlert.title} variant={notificationAlert.alertType}
+             onClose={() => {
+               setNotificationAlert({show: false});
+             }} dismissible closeLabel="chiudere tutto">
+        <Alert.Heading>{notificationAlert.title}</Alert.Heading>
+        {notificationAlert.text}
+      </Alert>
+    );
+  }
 
   // if (alerts !== null && alerts.length > 0) {
   //     const alert = alerts[0];

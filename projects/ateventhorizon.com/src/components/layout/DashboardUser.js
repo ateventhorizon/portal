@@ -1,37 +1,25 @@
-import React, { Fragment, useState } from "react";
-import { Redirect } from "react-router-dom";
-import PropTypes from "prop-types";
-import {connect, useDispatch} from "react-redux";
+import React, {Fragment, useState} from "react";
+import {Redirect} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {Button, Dropdown, FormControl, InputGroup, SplitButton} from "react-bootstrap";
 import {
-  SplitButton,
-  Dropdown,
-  InputGroup,
-  FormControl,
-  Button
-} from "react-bootstrap";
-import {
-  createProject,
   acceptInvitation,
-  declineInvitation,
-  setCurrentProject,
+  createProject,
+  declineInvitation, loadUser,
+  logout,
   sendInvitationToProject,
-  logout
+  setCurrentProject
 } from "../../actions/auth";
-import LocalAlert from "./LocalAlert";
 import {wasmSetCanvasVisibility} from "react-wasm-canvas";
+import {useGlobal} from "reactn";
 
-const DashboardUser = ({
-  userstate,
-  loading,
-  createProject,
-  acceptInvitation,
-  declineInvitation,
-  setCurrentProject,
-  sendInvitationToProject,
-  logout
-}) => {
+const DashboardUser = () => {
 
   const dispatch = useDispatch();
+  const userstate = useSelector(state => state.auth);
+  // eslint-disable-next-line
+  const [notificationAlert, setNotificationAlert] = useGlobal('notificationAlert');
+
   dispatch(wasmSetCanvasVisibility('hidden'));
 
   let inviteNameRef = React.useRef(null);
@@ -48,7 +36,7 @@ const DashboardUser = ({
     userstate.userdata.project !== null &&
     userstate.userdata.project !== ""
   ) {
-    return <Redirect to="/dashboardproject" />;
+    return <Redirect to="/dashboardproject"/>;
   }
 
   const onChange = e => {
@@ -71,13 +59,28 @@ const DashboardUser = ({
     declineInvitation(project, userstate.userdata.user.email);
   };
 
-  const invitePerson = async () => {
-    await sendInvitationToProject(
-      userstate.userdata.user.name,
-      currentManagedProject,
-      inviteNameRef.current.value
-    );
-  };
+  const invite = () => {
+    invitePerson(userstate.userdata.user.name, currentManagedProject, inviteNameRef.current.value);
+  }
+
+  const invitePerson = async (from, toProject, to) => {
+    try {
+      const res = await sendInvitationToProject(from, toProject, to);
+      setNotificationAlert({
+        show: true,
+        title: res.data.code === 200 ? "Great stuff!" : "Not invited because...",
+        text: res.data.msg,
+        alertType: res.data.code === 200 ? "success" : "warning"
+      });
+    } catch (e) {
+      setNotificationAlert({
+        show: true,
+        title: "Oh Oh",
+        text: "This is SPARTAAAAA!!! (+100)",
+        alertType: "danger"
+      });
+    }
+  }
 
   const closeProjectManagement = () => {
     setCurrentManagedProject(null);
@@ -87,24 +90,24 @@ const DashboardUser = ({
     setCurrentManagedProject(name);
   };
 
-  const onLoginToProject = (e, name) => {
+  const onLoginToProject = async (e, name) => {
     e.preventDefault();
-    setCurrentProject(name);
+    try {
+      setCurrentProject(name);
+      dispatch(loadUser());
+    } catch (e) {
+      
+    }
   };
 
-  const onLogout = e => {
-    e.preventDefault();
-    logout();
-  };
-
-  if (userstate.userdata === null) return <Fragment />;
+  if (userstate.userdata === null) return <Fragment/>;
 
   let userProjects;
   if (userstate.userdata.projects !== null) {
     userProjects = (
       <Fragment>
         <div className="yourproject">
-          <i className="fas fa-rocket" /> Your Projects:
+          <i className="fas fa-rocket"/> Your Projects:
         </div>
         <div className="project-login">
           {userstate.userdata.projects.map(projectObject => (
@@ -142,7 +145,7 @@ const DashboardUser = ({
     userProjects = (
       <Fragment>
         <div className="yourproject lead">
-          <i className="fas fa-chess-queen" /> Your Projects
+          <i className="fas fa-chess-queen"/> Your Projects
         </div>
         <span className="normal text-primary">
           You don't seem to have any project assigned yet.
@@ -160,12 +163,17 @@ const DashboardUser = ({
             variant="outline-dark"
             onClick={e => closeProjectManagement()}
           >
-            <i className="fas fa-times-circle" />
+            <i className="fas fa-times-circle"/>
           </Button>
         </div>
       </div>
       <div className="width100">Send invitation to join:</div>
-      <InputGroup className="mb-3">
+      <InputGroup className="mb-3" onKeyPress={(target) => {
+        if (target.charCode === 13) {
+          invite()
+        }
+      }}
+      >
         <InputGroup.Prepend>
           <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
         </InputGroup.Prepend>
@@ -176,19 +184,18 @@ const DashboardUser = ({
           ref={inviteNameRef}
         />
         <InputGroup.Append>
-          <Button variant="info" onClick={e => invitePerson(e)}>
+          <Button variant="info" onClick={() => invite()}>
             Invite
           </Button>
         </InputGroup.Append>
       </InputGroup>
-      <LocalAlert />
     </div>
   );
 
   const createNewProject = (
     <Fragment>
       <div className="yourproject">
-        <i className="fas fa-plus-circle" /> Create New Project
+        <i className="fas fa-plus-circle"/> Create New Project
       </div>
       <form className="form" onSubmit={e => onCreateProject(e)}>
         <div className="form-group">
@@ -200,7 +207,7 @@ const DashboardUser = ({
             onChange={e => onChange(e)}
           />
         </div>
-        <input type="submit" className="btn btn-primary" value="Create" />
+        <input type="submit" className="btn btn-primary" value="Create"/>
       </form>
     </Fragment>
   );
@@ -260,7 +267,7 @@ const DashboardUser = ({
         type="button"
         className="btn btn-danger"
         value="Logout"
-        onClick={e => onLogout(e)}
+        onClick={() => dispatch(logout())}
       />
     </div>
   );
@@ -284,30 +291,5 @@ const DashboardUser = ({
   );
 };
 
-DashboardUser.propTypes = {
-  userstate: PropTypes.object,
-  loading: PropTypes.bool,
-  createProject: PropTypes.func.isRequired,
-  acceptInvitation: PropTypes.func.isRequired,
-  declineInvitation: PropTypes.func.isRequired,
-  setCurrentProject: PropTypes.func.isRequired,
-  sendInvitationToProject: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired
-};
 
-const mapStateToProps = state => ({
-  userstate: state.auth,
-  loading: state.auth.loading
-});
-
-export default connect(
-  mapStateToProps,
-  {
-    createProject,
-    acceptInvitation,
-    declineInvitation,
-    setCurrentProject,
-    sendInvitationToProject,
-    logout
-  }
-)(DashboardUser);
+export default DashboardUser;

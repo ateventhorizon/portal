@@ -1,12 +1,9 @@
-import React, { Fragment } from "react";
+import React, {Fragment} from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import {
-  updateEntriesPartialSearch
-  // getFullEntity
-} from "../../../actions/entities";
+import {connect} from "react-redux";
+import {updateEntriesPartialSearch} from "../../../actions/entities";
 import EntitiesSearchBox from "./EntitiesSearchBox";
-import ContextualNavbar from "../ContextualNavbar";
+import EntityTypeTaskbar from "./EntityTypeTaskbar";
 
 const Entries = ({ cname }) => {
   return (
@@ -16,7 +13,7 @@ const Entries = ({ cname }) => {
           updatePartialSearch={updateEntriesPartialSearch}
           placeHolderText="Filter..."
         />
-        <ContextualNavbar />
+        <EntityTypeTaskbar />
       </Fragment>
     </div>
   );

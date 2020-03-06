@@ -41,7 +41,7 @@ const Landing = auth => {
           <Link to="./register" className="btn btn-primary my-2">
             Sign Up
           </Link>{" "}
-          <Link to="./login" className="btn btn-light my-2">
+          <Link to="./login" className="btn btn-success my-2">
             Login
           </Link>
         </div>
