@@ -112,6 +112,15 @@ void EditorBackEnd::updateImpl( const AggregatedInputData &_aid ) {
     });
     ImGui::End();
 
+    ImGui::Begin( "Camera" );
+    std::ostringstream camDump;
+    camDump << *sg.DC().get();
+    auto lines = split( camDump.str(), '\n' );
+    for ( const auto& line : lines ) {
+        ImGui::Text( "%s", line.c_str());
+    }
+    ImGui::End();
+
     ImGuiLuaConsole( rsg );
 #endif
 
