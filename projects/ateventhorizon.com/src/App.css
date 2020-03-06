@@ -50,6 +50,11 @@ body {
   -ms-overflow-style: none;
 }
 
+a, a:link, a:visited, a:focus, a:hover, a:active{
+  text-decoration: none;
+  text-decoration-color: inherit;
+  color: inherit;
+}
 ::-webkit-scrollbar {
   width: 0 !important;
 }
@@ -106,7 +111,7 @@ body {
   grid-area: navbaruser;
   align-self: center;
   justify-self: end;
-  color: var(--light-color);
+  color: var(--primary-color);
 }
 
 .navbartitle-a {

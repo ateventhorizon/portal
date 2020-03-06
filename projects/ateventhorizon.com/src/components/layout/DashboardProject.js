@@ -20,6 +20,7 @@ import {
   GroupUI
 } from "../../utils/utils";
 import {createPlaceHolder, getFullEntity} from "../../actions/entities";
+import {Redirect} from "react-router-dom";
 
 const containerClassFromGroup = (currEntity, group) => {
   switch (group) {
@@ -65,6 +66,7 @@ const DashboardProject = () => {
     let canvasContainer = React.useRef(null);
     const dispatch = useDispatch();
 
+    const userdata = useSelector(state => state.auth.userdata);
     const currentEntity = useSelector(state => state.entities.currentEntity);
     const entities = useSelector(state => state.entities.entries);
     const group = useSelector(state => state.entities.groupSelected);
@@ -76,6 +78,11 @@ const DashboardProject = () => {
         dispatch(wasmSetCanvasSize(rect));
       }
     }, [hasResized, dispatch]);
+
+    if ( userdata && userdata.project === null ) {
+      return <Redirect to="/#/dashboarduser"></Redirect>
+    }
+
     dispatch(wasmSetCanvasVisibility('visible'));
 
     if (group === GroupScript) {
