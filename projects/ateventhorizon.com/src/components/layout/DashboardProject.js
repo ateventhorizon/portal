@@ -21,6 +21,7 @@ import {
 } from "../../utils/utils";
 import {createPlaceHolder, getFullEntity} from "../../actions/entities";
 import {Redirect} from "react-router-dom";
+import {useGlobal} from "reactn";
 
 const containerClassFromGroup = (currEntity, group) => {
   switch (group) {
@@ -63,69 +64,75 @@ const containerClassFromGroup = (currEntity, group) => {
 };
 
 const DashboardProject = () => {
-    let canvasContainer = React.useRef(null);
-    const dispatch = useDispatch();
+  let canvasContainer = React.useRef(null);
+  const dispatch = useDispatch();
+  const [auth,] = useGlobal('auth');
+  const [entities,] = useGlobal('entities');
 
-    const userdata = useSelector(state => state.auth.userdata);
-    const currentEntity = useSelector(state => state.entities.currentEntity);
-    const entities = useSelector(state => state.entities.entries);
-    const group = useSelector(state => state.entities.groupSelected);
-    const hasResized = useSelector(state => state.wasm.resize);
+  const currentEntity = entities ? entities.currentEntity : null;
+  const group = entities ? entities.groupSelected : null;
+  const hasResized = useSelector(state => state.wasm.resize);
 
-    useEffect(() => {
-      if (canvasContainer.current) {
-        const rect = canvasContainer.current.getBoundingClientRect();
-        dispatch(wasmSetCanvasSize(rect));
-      }
-    }, [hasResized, dispatch]);
-
-    if ( userdata && userdata.project === null ) {
-      return <Redirect to="/#/dashboarduser"></Redirect>
+  useEffect(() => {
+    if (canvasContainer.current) {
+      const rect = canvasContainer.current.getBoundingClientRect();
+      dispatch(wasmSetCanvasSize(rect));
     }
-
-    dispatch(wasmSetCanvasVisibility('visible'));
-
-    if (group === GroupScript) {
-      if (entities.length >= 1 && !currentEntity) {
-        dispatch(getFullEntity(entities[0]));
-      } else if (!currentEntity) {
-        dispatch(createPlaceHolder(group));
-      }
+    if (auth === null || (auth && auth.project === null)) {
+      dispatch(wasmSetCanvasVisibility('hidden'));
     }
+  }, [auth, hasResized, dispatch]);
 
-    const {mainContainerClass, mainContainerDiv} = containerClassFromGroup(
-      currentEntity,
-      group
-    );
+  if (auth === null) {
+    return <Redirect to="/"></Redirect>
+  }
+
+  if (auth && auth.project === null) {
+    return <Redirect to="/dashboarduser"></Redirect>
+  }
+
+  dispatch(wasmSetCanvasVisibility('visible'));
+
+  if (group === GroupScript) {
+    if (entities.length >= 1 && !currentEntity) {
+      dispatch(getFullEntity(entities[0]));
+    } else if (!currentEntity) {
+      dispatch(createPlaceHolder(group));
+    }
+  }
+
+  const {mainContainerClass, mainContainerDiv} = containerClassFromGroup(
+    currentEntity,
+    group
+  );
 
 // const bUseEntityUpdate = groupHasUpdateFacility(currentEntity, group);
-    const bShowMetaSection = groupHasMetadataSection(currentEntity, group);
+  const bShowMetaSection = groupHasMetadataSection(currentEntity, group);
 
-    const entityName = (
-      <div className="source_tabs-a">
-        <div className="source_tabs-internal">
-          {currentEntity && currentEntity.entity.name}
-        </div>
+  const entityName = (
+    <div className="source_tabs-a">
+      <div className="source_tabs-internal">
+        {currentEntity && currentEntity.entity.name}
       </div>
-    );
+    </div>
+  );
 
-    const mainEditorDiv = (
-      <div className={mainContainerClass}>
-        {entityName}
-        <RenderParamsToolbar/>
-        <div className="EntryEditorRender" ref={canvasContainer}></div>
-        {currentEntity && mainContainerDiv}
-        {bShowMetaSection && <EntityMetaSection/>}
-      </div>
-    );
+  const mainEditorDiv = (
+    <div className={mainContainerClass}>
+      {entityName}
+      <RenderParamsToolbar/>
+      <div className="EntryEditorRender" ref={canvasContainer}></div>
+      {currentEntity && mainContainerDiv}
+      {bShowMetaSection && <EntityMetaSection/>}
+    </div>
+  );
 
-    return (
-      <div className="dashboardContainer">
-        <Entries cname="thumbs-a thumbsEntityArea"/>
-        <div className="editor-a">{mainEditorDiv}</div>
-      </div>
-    );
-  }
-;
+  return (
+    <div className="dashboardContainer">
+      <Entries cname="thumbs-a thumbsEntityArea"/>
+      <div className="editor-a">{mainEditorDiv}</div>
+    </div>
+  );
+};
 
 export default DashboardProject;

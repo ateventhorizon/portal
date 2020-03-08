@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useEffect} from "react";
 import {HashRouter as Router, Route, Switch} from "react-router-dom";
 import Landing from "./components/layout/Landing";
 import Navbar from "./components/layout/Navbar";
@@ -14,6 +14,8 @@ import store from "./store";
 import "./App.css";
 import WasmCanvas from "react-wasm-canvas";
 import {initGlobalStorage} from "./globalstorage/GlobalStorage";
+import {api, useApiSilent} from "./api/apiEntryPoint";
+import {loadUser} from "./api/auth";
 // import WasmCanvas from "./localwasm";
 
 initHostEnv();
@@ -24,6 +26,14 @@ const App = () => {
 
   const wwwPrefixToAvoidSSLMadness = process.env.REACT_APP_EH_CLOUD_HOST === 'localhost' ? "" : "www.";
   let wasmArgumentList = [`hostname=${wwwPrefixToAvoidSSLMadness}${process.env.REACT_APP_EH_CLOUD_HOST}`];
+
+  const authApi = useApiSilent('auth');
+  useEffect(() => {
+    api( authApi, loadUser );
+    return () => {
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Provider store={store}>

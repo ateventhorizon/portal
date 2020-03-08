@@ -1,10 +1,12 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import {Link, Redirect} from "react-router-dom";
+import {useGlobal} from "reactn";
 
-const Landing = auth => {
-  if (auth.auth && auth.auth.isAuthenticated === true) {
+const Landing = () => {
+
+  const [auth] = useGlobal('auth');
+
+  if (auth) {
     return <Redirect to="/dashboarduser" />;
   }
 
@@ -50,15 +52,4 @@ const Landing = auth => {
   );
 };
 
-Landing.propTypes = {
-  auth: PropTypes.object
-};
-
-const mapStateToProps = state => ({
-  auth: state.auth
-});
-
-export default connect(
-  mapStateToProps,
-  {}
-)(Landing);
+export default Landing;

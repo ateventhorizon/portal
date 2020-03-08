@@ -1141,6 +1141,10 @@ li.app_controls-a {
   display: inline;
 }
 
+.inliner-block {
+  display: inline-block;
+}
+
 .blocker {
   display: block;
 }

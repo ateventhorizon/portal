@@ -1,21 +1,22 @@
 import React, {Fragment, useState} from "react";
 import {Redirect} from "react-router-dom";
-import {useDispatch} from "react-redux";
 import {Button, Dropdown, FormControl, InputGroup, SplitButton} from "react-bootstrap";
-import {acceptInvitation, declineInvitation} from "../../actions/auth";
-import {wasmSetCanvasVisibility} from "react-wasm-canvas";
 import {alertIfSuccessful, api, useApi} from "../../api/apiEntryPoint";
 import {logoutUser} from "../../api/auth";
-import {createProject, sendInvitationToProject} from "../../api/project";
+import {
+  acceptInvitationToJoinProject,
+  createProject,
+  declineInvitationToJoinProject,
+  loginIntoProject,
+  sendInvitationToProject
+} from "../../api/project";
 
 const DashboardUser = () => {
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const authApi = useApi('auth');
-  const [auth, authStore, , alertStore] = authApi;
+  const [auth, , , alertStore] = authApi;
   const projectApi = useApi('project');
-
-  dispatch(wasmSetCanvasVisibility('hidden'));
 
   let inviteNameRef = React.useRef(null);
 
@@ -28,15 +29,8 @@ const DashboardUser = () => {
   if (auth === null) {
     return (<Redirect to="/"/>)
   }
-  if (auth.project !== "") {
+  if (auth.project !== null) {
     return (<Redirect to="/dashboardproject"/>)
-  }
-
-  const setProject = (project) => {
-    authStore({
-      ...auth,
-      project: project
-    });
   }
 
   const onChange = e => {
@@ -52,11 +46,11 @@ const DashboardUser = () => {
   };
 
   const onAcceptInvitation = project => {
-    acceptInvitation(project, auth.user.email);
+    api( authApi, acceptInvitationToJoinProject, project, auth.user.email);
   };
 
   const onDeclineInvitation = project => {
-    declineInvitation(project, auth.user.email);
+    api( authApi, declineInvitationToJoinProject, project, auth.user.email);
   };
 
   const invite = async () => {
@@ -75,7 +69,7 @@ const DashboardUser = () => {
 
   const onLoginToProject = (e, name) => {
     e.preventDefault();
-    setProject(name, auth, authStore);
+    api( authApi, loginIntoProject, name);
   };
 
   let userProjects;
@@ -87,7 +81,7 @@ const DashboardUser = () => {
         </div>
         <div className="project-login">
           {auth.projects.map(projectObject => (
-            <Fragment key={`fragment-${projectObject.project}`}>
+            <div key={`fragment-${projectObject.project}`} className="inliner-block my-1">
               <SplitButton
                 title={projectObject.project}
                 variant="primary"
@@ -112,7 +106,7 @@ const DashboardUser = () => {
                 key={`dropdown-split-spacer-${projectObject.project}`}
                 className="inliner mx-1"
               />
-            </Fragment>
+            </div>
           ))}
         </div>
       </Fragment>
@@ -124,7 +118,7 @@ const DashboardUser = () => {
           <i className="fas fa-chess-queen"/> Your Projects
         </div>
         <span className="normal text-primary">
-          You don't seem to have any project assigned yet.
+          It feels quite lonely in here!
         </span>
       </Fragment>
     );

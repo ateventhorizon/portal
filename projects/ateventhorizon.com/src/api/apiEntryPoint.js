@@ -72,6 +72,11 @@ export const useApi = (name) => {
   return [q1[0], q1[1], q2[0], q2[1]];
 };
 
+export const useApiSilent = (name) => {
+  const q1 = useGlobal(name);
+  return [q1[0], q1[1], null, null];
+};
+
 export const alertIfSuccessful = (res, alertStore, title, text) => {
 
   if (res.isSuccessful) {

@@ -1,18 +1,22 @@
 import React, {Fragment} from "react";
 import {ProgressBar} from "./ProgressBar";
-import {useDispatch, useSelector} from "react-redux";
-import {logoffFromProject} from "../../actions/auth";
 import {UserNameText} from "./Navbar.styled";
+import {useApi} from "../../api/apiEntryPoint";
 
 const Navbar = () => {
 
-  const userstate = useSelector(state => state.auth);
-  const dispatch = useDispatch();
+  const authApi = useApi('auth');
+  const [auth, authStore] = authApi;
 
-  const hasUser = (userstate.isAuthenticated && userstate.userdata && userstate.userdata.user.name);
-  const userName = hasUser ? userstate.userdata.user.name : "";
+  const userName = auth ? auth.user.name : "";
+  const title = auth ? auth.project : "";
 
-  const title = userstate.userdata ? userstate.userdata.project : "";
+  const logoffFromProject = () => {
+    authStore({
+      ...auth,
+      project: null
+    });
+  };
 
   return (
     <Fragment>
@@ -28,8 +32,10 @@ const Navbar = () => {
           <span>orizon</span>
         </div>
         <div className="navbartitle-a">{title}</div>
-        <UserNameText onClick={ () => {dispatch(logoffFromProject())}}>
-          {userstate.isAuthenticated ? <span><i className="fas fa-user"/>{" "}{userName}</span> : ""}
+        <UserNameText onClick={() => {
+          logoffFromProject();
+        }}>
+          {auth ? <span><i className="fas fa-user"/>{" "}{userName}</span> : ""}
         </UserNameText>
       </div>
     </Fragment>

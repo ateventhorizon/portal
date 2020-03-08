@@ -1,7 +1,7 @@
-import React, { useCallback } from "react";
+import React, {useCallback} from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { useDropzone } from "react-dropzone";
+import {connect} from "react-redux";
+import {useDropzone} from "react-dropzone";
 
 const EntityUpdateContent = ({ currentEntity }) => {
   const onDrop = useCallback(acceptedFiles => {

@@ -20,6 +20,7 @@ export const ProgressBar = () => {
   useEffect(() => {
     axios.interceptors.request.use(interceptors.request);
     return () => {
+      // axios.interceptors.request.eject(interceptors.request.id);
     }
   }, [interceptors]);
 

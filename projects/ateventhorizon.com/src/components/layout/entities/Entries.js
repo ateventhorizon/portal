@@ -1,11 +1,14 @@
 import React, {Fragment} from "react";
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
 import {updateEntriesPartialSearch} from "../../../actions/entities";
 import EntitiesSearchBox from "./EntitiesSearchBox";
 import EntityTypeTaskbar from "./EntityTypeTaskbar";
 
 const Entries = ({ cname }) => {
+
+  // const [entities] = useGlobal('entities');
+  // const entries = entities ? entities.entriesFiltered : null;
+  // const currentEntity = entities ? entities.currentEntity : null;
+
   return (
     <div className={cname}>
       <Fragment>
@@ -19,19 +22,4 @@ const Entries = ({ cname }) => {
   );
 };
 
-Entries.propTypes = {
-  loading: PropTypes.bool,
-  entries: PropTypes.array,
-  currentEntity: PropTypes.object
-};
-
-const mapStateToProps = state => ({
-  loading: state.auth.loading,
-  entries: state.entities.entriesFiltered,
-  currentEntity: state.entities.currentEntity
-});
-
-export default connect(
-  mapStateToProps,
-  {}
-)(Entries);
+export default Entries;

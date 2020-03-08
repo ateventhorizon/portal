@@ -4,6 +4,6 @@ export const initGlobalStorage = () => setGlobal({
   confirmAlert: null,
   notificationAlert: null,
   auth: null,
-  currEntity: null
+  entities: null
 });
 

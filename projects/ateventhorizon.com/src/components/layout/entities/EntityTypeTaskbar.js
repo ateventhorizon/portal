@@ -1,22 +1,17 @@
-import React, { Fragment, useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import React, {Fragment, useEffect, useState} from "react";
+import {changeEntitiesGroup, getEntitiesOfGroup, getFullEntity} from "../../../actions/entities";
 import {
-  getEntitiesOfGroup,
-  getFullEntity,
-  changeEntitiesGroup
-} from "../../../actions/entities";
-import {
-  GroupMaterial,
+  GroupFont,
   GroupGeom,
   GroupImage,
-  GroupUI,
+  GroupMaterial,
   GroupProfile,
-  GroupFont,
-  GroupScript
+  GroupScript,
+  GroupUI
 } from "../../../utils/utils";
 import EntitiesThumbHandler from "./EntitiesThumbHandler";
 import EntityDragAndImport from "./EntityDragAndImport";
+import {useGlobal} from "reactn";
 
 // const AppStrID = "Apps";
 const ScriptStrID = "Scripts";
@@ -28,26 +23,20 @@ const GUIsStrID = "UIs";
 const VectorsStrID = "Vectors";
 const ColorsStrID = "Colors";
 
-const EntityTypeTaskBar = ({
-  userstate,
-  getEntitiesOfGroup,
-  changeEntitiesGroup,
-  entries,
-  currentEntity
-}) => {
+const EntityTypeTaskBar = () => {
   const [currentGroup, setCurrentGroup] = useState("default");
+  const [auth] = useGlobal('auth');
+  const [entities] = useGlobal('entities');
+  const entries = entities ? entities.entriesFiltered : null;
+  const currentEntity = entities ? entities.currentEntity : null;
 
   useEffect(() => {
-    if (
-      userstate.userdata &&
-      userstate.userdata.project !== null &&
-      currentGroup === "default"
-    ) {
+    if ( currentGroup === "default") {
       const groupId = GroupScript;
       setCurrentGroup(groupId);
-      getEntitiesOfGroup(groupId, userstate.userdata.project);
+      getEntitiesOfGroup(groupId, auth.project);
     }
-  }, [getEntitiesOfGroup, currentGroup, userstate]);
+  }, [currentGroup, auth]);
 
   const viewMore = group => () => {
     let groupId = "";
@@ -61,7 +50,7 @@ const EntityTypeTaskBar = ({
     if (group === ColorsStrID) groupId = "color_scheme";
     if (currentGroup !== groupId) {
       setCurrentGroup(groupId);
-      changeEntitiesGroup(groupId, userstate.userdata.project);
+      changeEntitiesGroup(groupId, auth.project);
       // return <Redirect to="/dashboard/material" />;
     }
   };
@@ -126,21 +115,4 @@ const EntityTypeTaskBar = ({
   return <Fragment>{topEntitySelectorBar}</Fragment>;
 };
 
-EntityTypeTaskBar.propTypes = {
-  userstate: PropTypes.object,
-  getEntitiesOfGroup: PropTypes.func.isRequired,
-  changeEntitiesGroup: PropTypes.func.isRequired,
-  entries: PropTypes.array,
-  currentEntity: PropTypes.object
-};
-
-const mapStateToProps = state => ({
-  userstate: state.auth,
-  entries: state.entities.entriesFiltered,
-  currentEntity: state.entities.currentEntity
-});
-
-export default connect(
-  mapStateToProps,
-  { getEntitiesOfGroup, changeEntitiesGroup }
-)(EntityTypeTaskBar);
+export default EntityTypeTaskBar;
