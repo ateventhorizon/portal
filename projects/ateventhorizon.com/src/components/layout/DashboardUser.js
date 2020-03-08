@@ -1,24 +1,19 @@
 import React, {Fragment, useState} from "react";
 import {Redirect} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {Button, Dropdown, FormControl, InputGroup, SplitButton} from "react-bootstrap";
-import {
-  acceptInvitation,
-  createProject,
-  declineInvitation, loadUser,
-  logout,
-  sendInvitationToProject,
-  setCurrentProject
-} from "../../actions/auth";
+import {acceptInvitation, declineInvitation} from "../../actions/auth";
 import {wasmSetCanvasVisibility} from "react-wasm-canvas";
-import {useGlobal} from "reactn";
+import {alertIfSuccessful, api, useApi} from "../../api/apiEntryPoint";
+import {logoutUser} from "../../api/auth";
+import {createProject, sendInvitationToProject} from "../../api/project";
 
 const DashboardUser = () => {
 
   const dispatch = useDispatch();
-  const userstate = useSelector(state => state.auth);
-  // eslint-disable-next-line
-  const [notificationAlert, setNotificationAlert] = useGlobal('notificationAlert');
+  const authApi = useApi('auth');
+  const [auth, authStore, , alertStore] = authApi;
+  const projectApi = useApi('project');
 
   dispatch(wasmSetCanvasVisibility('hidden'));
 
@@ -30,13 +25,18 @@ const DashboardUser = () => {
 
   const [currentManagedProject, setCurrentManagedProject] = useState(null);
 
-  if (
-    userstate.isAuthenticated &&
-    userstate.userdata &&
-    userstate.userdata.project !== null &&
-    userstate.userdata.project !== ""
-  ) {
-    return <Redirect to="/dashboardproject"/>;
+  if (auth === null) {
+    return (<Redirect to="/"/>)
+  }
+  if (auth.project !== "") {
+    return (<Redirect to="/dashboardproject"/>)
+  }
+
+  const setProject = (project) => {
+    authStore({
+      ...auth,
+      project: project
+    });
   }
 
   const onChange = e => {
@@ -48,38 +48,21 @@ const DashboardUser = () => {
 
   const onCreateProject = e => {
     e.preventDefault();
-    createProject(newProjectformData.projectNew);
+    api( authApi, createProject, newProjectformData.projectNew);
   };
 
   const onAcceptInvitation = project => {
-    acceptInvitation(project, userstate.userdata.user.email);
+    acceptInvitation(project, auth.user.email);
   };
 
   const onDeclineInvitation = project => {
-    declineInvitation(project, userstate.userdata.user.email);
+    declineInvitation(project, auth.user.email);
   };
 
-  const invite = () => {
-    invitePerson(userstate.userdata.user.name, currentManagedProject, inviteNameRef.current.value);
-  }
-
-  const invitePerson = async (from, toProject, to) => {
-    try {
-      const res = await sendInvitationToProject(from, toProject, to);
-      setNotificationAlert({
-        show: true,
-        title: res.data.code === 200 ? "Great stuff!" : "Not invited because...",
-        text: res.data.msg,
-        alertType: res.data.code === 200 ? "success" : "warning"
-      });
-    } catch (e) {
-      setNotificationAlert({
-        show: true,
-        title: "Oh Oh",
-        text: "This is SPARTAAAAA!!! (+100)",
-        alertType: "danger"
-      });
-    }
+  const invite = async () => {
+    const invited = inviteNameRef.current.value;
+    const res = await api(projectApi, sendInvitationToProject, auth.user.name, currentManagedProject, invited);
+    alertIfSuccessful(res, alertStore, "Great stuff!", invited + " has been invited, give them a shout!");
   }
 
   const closeProjectManagement = () => {
@@ -90,27 +73,20 @@ const DashboardUser = () => {
     setCurrentManagedProject(name);
   };
 
-  const onLoginToProject = async (e, name) => {
+  const onLoginToProject = (e, name) => {
     e.preventDefault();
-    try {
-      setCurrentProject(name);
-      dispatch(loadUser());
-    } catch (e) {
-      
-    }
+    setProject(name, auth, authStore);
   };
 
-  if (userstate.userdata === null) return <Fragment/>;
-
   let userProjects;
-  if (userstate.userdata.projects !== null) {
+  if (auth.projects !== null) {
     userProjects = (
       <Fragment>
         <div className="yourproject">
           <i className="fas fa-rocket"/> Your Projects:
         </div>
         <div className="project-login">
-          {userstate.userdata.projects.map(projectObject => (
+          {auth.projects.map(projectObject => (
             <Fragment key={`fragment-${projectObject.project}`}>
               <SplitButton
                 title={projectObject.project}
@@ -212,7 +188,7 @@ const DashboardUser = () => {
     </Fragment>
   );
 
-  const invitations = userstate.userdata.invitations;
+  const invitations = auth.invitations;
 
   const invitationsCode =
     invitations.length === 0 ? (
@@ -267,7 +243,7 @@ const DashboardUser = () => {
         type="button"
         className="btn btn-danger"
         value="Logout"
-        onClick={() => dispatch(logout())}
+        onClick={() => api(authApi, logoutUser)}
       />
     </div>
   );
@@ -278,7 +254,7 @@ const DashboardUser = () => {
         <div className="large">
           <span>Hello, </span>{" "}
           <span className="navdiv-projecttext">
-            {userstate.userdata.user.name}
+            {auth.user.name}
           </span>
         </div>
         {userProjects}

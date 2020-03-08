@@ -1,44 +1,46 @@
-import React, { Fragment, useState } from "react";
-import { Link, Redirect } from "react-router-dom";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { login } from "../../actions/auth";
+import React, {Fragment, useState} from "react";
+import {Link, Redirect} from "react-router-dom";
 
-const Login = ({ login, isAuthenticated, user }) => {
+import {api, useApi} from "../../api/apiEntryPoint";
+import {loginUser} from "../../api/auth";
+
+const Login = () => {
   const [formData, setFromData] = useState({
     email: "",
     password: "",
     project: ""
   });
 
-  const { email, password, project } = formData;
+  const authApi = useApi('auth');
+  const [auth] = authApi;
+
+  if ( auth ) {
+    return <Redirect to="/dashboarduser" />;
+  }
+
+  const { email, password } = formData;
   const onChange = e =>
     setFromData({
       ...formData,
       [e.target.name]: e.target.value
     });
-  const onSubmit = e => {
-    e.preventDefault();
-    login(email, password, project);
-  };
 
-  // Redirect if logged in
-  if (isAuthenticated) {
-    console.log("Redirecting to dashboard...");
-    return <Redirect to="/dashboarduser" />;
-  }
+  const performLogin = (ev) => {
+    ev.preventDefault();
+    api(authApi, loginUser, email, password);
+  };
 
   return (
     <Fragment>
       <section className="container">
-        <h1 className="large text-success">
+        <h1 className="large text-info">
           <br />
           Login
         </h1>
         <p className="lead">
-          <i className="fas fa-user" /> Log-in Into Your Account
+          <span className="text-warning"><i className="fas fa-user" /></span> Log-in Into Your Account
         </p>
-        <form className="form" onSubmit={e => onSubmit(e)}>
+        <form className="form" onSubmit={(ev) => performLogin(ev)}>
           <div className="form-group">
             <input
               type="email"
@@ -60,7 +62,7 @@ const Login = ({ login, isAuthenticated, user }) => {
               minLength="6"
             />
           </div>
-          <input type="submit" className="btn btn-success" value="Login" />
+          <input type="submit" className="btn btn-info" value="Login" />
         </form>
         <p className="my-3">
           Don't have an account? <Link to="/register"><span className="text-info">Sign Up</span></Link>
@@ -70,18 +72,4 @@ const Login = ({ login, isAuthenticated, user }) => {
   );
 };
 
-Login.propTypes = {
-  login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool,
-  user: PropTypes.object
-};
-
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  user: state.auth.user
-});
-
-export default connect(
-  mapStateToProps,
-  { login }
-)(Login);
+export default Login;

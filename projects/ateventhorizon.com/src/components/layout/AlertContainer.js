@@ -10,19 +10,22 @@ const AlertContainer = () => {
   const [confirmAlert, setConfirmAlert] = useGlobal('confirmAlert');
   const [notificationAlert, setNotificationAlert] = useGlobal('notificationAlert');
 
-  if (confirmAlert.show === true) {
+  if (confirmAlert) {
     return (
       <Modal
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        show={confirmAlert.show}>
+        show={true}
+        onClose={() => {
+          setConfirmAlert(null);
+        }}>
         {confirmAlert.title && <Modal.Header closeButton>
           <Modal.Title>{confirmAlert.title}</Modal.Title>
         </Modal.Header>}
         <Modal.Body>{confirmAlert.text}</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={confirmAlert.noCallback}>
+          <Button variant="secondary" onClick={setConfirmAlert(null)}>
             {confirmAlert.noText}
           </Button>
           <Button variant={confirmAlert.yesType} onClick={confirmAlert.yesCallback}>
@@ -32,13 +35,13 @@ const AlertContainer = () => {
       </Modal>)
   }
 
-  if (notificationAlert.show === true) {
+  if (notificationAlert) {
     return (
       <Alert key={notificationAlert.title} variant={notificationAlert.alertType}
              onClose={() => {
-               setNotificationAlert({show: false});
-             }} dismissible closeLabel="chiudere tutto">
-        <Alert.Heading>{notificationAlert.title}</Alert.Heading>
+               setNotificationAlert(null);
+             }} dismissible>
+        {notificationAlert.title && <Alert.Heading>{notificationAlert.title}</Alert.Heading>}
         {notificationAlert.text}
       </Alert>
     );

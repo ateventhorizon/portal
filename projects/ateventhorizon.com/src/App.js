@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from "react";
+import React, {Fragment} from "react";
 import {HashRouter as Router, Route, Switch} from "react-router-dom";
 import Landing from "./components/layout/Landing";
 import Navbar from "./components/layout/Navbar";
@@ -8,36 +8,22 @@ import {initHostEnv} from "./HostEnv";
 
 import {DBConfig} from "./DBConfig";
 import {initDB} from "react-indexed-db";
-
-// Redux
 import {Provider} from "react-redux";
 import store from "./store";
 
-import {loadUser} from "./actions/auth";
-
 import "./App.css";
 import WasmCanvas from "react-wasm-canvas";
+import {initGlobalStorage} from "./globalstorage/GlobalStorage";
 // import WasmCanvas from "./localwasm";
-import {setGlobal} from "reactn";
 
 initHostEnv();
+initGlobalStorage();
 initDB(DBConfig);
-
-setGlobal({
-  alert: {},
-  confirmAlert: {},
-  notificationAlert: {},
-  currEntity: {}
-});
 
 const App = () => {
 
   const wwwPrefixToAvoidSSLMadness = process.env.REACT_APP_EH_CLOUD_HOST === 'localhost' ? "" : "www.";
   let wasmArgumentList = [`hostname=${wwwPrefixToAvoidSSLMadness}${process.env.REACT_APP_EH_CLOUD_HOST}`];
-
-  useEffect(() => {
-    store.dispatch(loadUser());
-  });
 
   return (
     <Provider store={store}>

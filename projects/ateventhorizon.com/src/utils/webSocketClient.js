@@ -66,7 +66,10 @@ export const wscConnect = session => {
 
 export const wscClose = user => {
   // wscSendInternal("Logout", `${user.name} has logged out!`);
-  webSocketClient.close();
+  if (webSocketClient) {
+    webSocketClient.close();
+    webSocketClient = null;
+  }
 };
 
 export const wscSend = (message, obj) => {

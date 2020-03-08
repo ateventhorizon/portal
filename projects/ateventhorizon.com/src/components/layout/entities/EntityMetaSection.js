@@ -25,19 +25,13 @@ const EntityMetaSection = () => {
 
   const onDeleteEntity = e => {
     setConfirmAlert({
-      show: true,
-      title: null,
       text: "Confirm deletion of " + entity.name,
       noText: "No",
       yesText: "Yes, do it",
       yesType: "danger",
       yesCallback: async () => {
         await deleteEntity(entity._id);
-        setConfirmAlert({show: false});
       },
-      noCallback: () => {
-        setConfirmAlert({show: false});
-      }
     });
   };
 

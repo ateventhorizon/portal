@@ -1,17 +1,21 @@
-import React, { Fragment, useState } from "react";
-import { connect } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
-import { setAlert } from "../../actions/alert";
-import { register } from "../../actions/auth";
-import PropTypes from "prop-types";
+import React, {Fragment, useState} from "react";
+import {Link, Redirect} from "react-router-dom";
+import {api, movieWarning, useApi} from "../../api/apiEntryPoint";
+import {registerUser} from "../../api/auth";
 
-const Register = ({ setAlert, register, isAuthenticated }) => {
+const Register = () => {
   const [formData, setFromData] = useState({
     name: "",
     email: "",
     password: "",
     password2: ""
   });
+  const authApi = useApi('auth');
+  const [auth, , , alertStore] = authApi;
+
+  if ( auth ) {
+    return <Redirect to="/dashboarduser" />;
+  }
 
   const { name, email, password, password2 } = formData;
   const onChange = e =>
@@ -22,26 +26,21 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
   const onSubmit = e => {
     e.preventDefault();
     if (password !== password2) {
-      setAlert("Passwords do not match", "danger");
+      movieWarning(alertStore, "Passwords do not match");
     } else {
-      console.log({ name, email, password });
-      register({ name, email, password });
+      api( authApi, registerUser, name, email, password );
     }
   };
-
-  if (isAuthenticated) {
-    return <Redirect to="/" />;
-  }
 
   return (
     <Fragment>
       <section className="container">
-        <h1 className="large text-primary">
+        <h1 className="large text-info">
           <br />
           Sign Up
         </h1>
         <p className="lead">
-          <i className="fas fa-user" /> Create Your Account
+          <span className="text-warning"><i className="fas fa-user" /></span> Create Your Account
         </p>
         <form className="form" onSubmit={e => onSubmit(e)}>
           <div className="form-group">
@@ -72,6 +71,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
               value={password}
               onChange={e => onChange(e)}
               minLength="6"
+              autocomplete="new-password"
             />
           </div>
           <div className="form-group">
@@ -87,24 +87,11 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
           <input type="submit" className="btn btn-primary" value="Register" />
         </form>
         <p className="my-3">
-          Already have an account? <Link to="/login">Sign In</Link>
+          Already have an account? <Link to="/login"><span className="text-info">Sign In</span></Link>
         </p>
       </section>
     </Fragment>
   );
 };
 
-Register.propTypes = {
-  setAlert: PropTypes.func.isRequired,
-  register: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
-};
-
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
-});
-
-export default connect(
-  mapStateToProps,
-  { setAlert, register }
-)(Register);
+export default Register;
