@@ -92,57 +92,6 @@ a, a:link, a:visited, a:focus, a:hover, a:active{
   text-shadow: -1px -1px 4px white;
 }
 
-.navbarlogo-a {
-  grid-area: navbarlogo;
-  align-self: center;
-  justify-self: center;
-}
-
-.logofont {
-  font-family: "Righteous";
-}
-
-.navbareh-a {
-  grid-area: navbareh;
-  align-self: center;
-  justify-self: start;
-  font-family: "Righteous";
-  font-size: 1.3rem;
-  padding-left: 1.5%;
-}
-
-.navbaruser-a {
-  grid-area: navbaruser;
-  align-self: center;
-  justify-self: end;
-  color: var(--primary-color);
-}
-
-.navbartitle-a {
-  grid-area: navbartitle;
-  align-self: center;
-  justify-self: center;
-  font-size: 1.3rem;
-  color: var(--secondary-alt-color);
-}
-
-.navbarGrid {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 50000;
-  height: var(--navbar-height);
-  background: var(--dark-color-transparent);
-  background-color: var(--dark-color-transparent);
-  display: grid;
-  grid-template-columns: 2% 23% 50% 25%;
-  grid-template-rows: 100%;
-  grid-template-areas: "navbarlogo navbareh navbartitle navbaruser";
-  padding: 0.25% 1%;
-  border-bottom: 1px solid var(--middle-grey-color);
-}
-
 .projectInvitationGrid {
   display: grid;
   grid-template-columns: 90% 10%;
