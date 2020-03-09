@@ -1,6 +1,6 @@
 import axios from "axios";
-import {wscClose, wscConnect} from "../utils/webSocketClient";
-import {isStatusCodeSuccessful} from "./apiStatus";
+import {wscClose, wscConnect} from "../../utils/webSocketClient";
+import {isStatusCodeSuccessful} from "../api/apiStatus";
 
 export const loadUser = async () => {
   return await axios.get(`/api/user`);

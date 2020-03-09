@@ -1,22 +1,13 @@
 import React, {Fragment} from "react";
-import {ProgressBar} from "./ProgressBar";
+import {ProgressBar} from "../../futuremodules/progressbar/ProgressBar";
 import {UserNameText} from "./Navbar.styled";
-import {useApi} from "../../api/apiEntryPoint";
+import {getProject, getUserName, logoffFromProject, useGetAuth} from "../../futuremodules/auth/authAccessors";
 
 const Navbar = () => {
 
-  const authApi = useApi('auth');
-  const [auth, authStore] = authApi;
-
-  const userName = auth ? auth.user.name : "";
-  const title = auth ? auth.project : "";
-
-  const logoffFromProject = () => {
-    authStore({
-      ...auth,
-      project: null
-    });
-  };
+  const auth = useGetAuth();
+  const userName = getUserName(auth);
+  const title = getProject(auth);
 
   return (
     <Fragment>
@@ -32,10 +23,10 @@ const Navbar = () => {
           <span>orizon</span>
         </div>
         <div className="navbartitle-a">{title}</div>
-        <UserNameText onClick={() => {
-          logoffFromProject();
-        }}>
-          {auth ? <span><i className="fas fa-user"/>{" "}{userName}</span> : ""}
+        <UserNameText onClick={ () =>
+          logoffFromProject(auth)
+        }>
+          {userName && <span><i className="fas fa-user"/>{" "}{userName}</span>}
         </UserNameText>
       </div>
     </Fragment>

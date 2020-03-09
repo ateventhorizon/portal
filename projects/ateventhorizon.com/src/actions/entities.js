@@ -3,9 +3,7 @@ import {
   CHANGE_MATERIAL_COLOR,
   ENTITIES_PARTIAL_SEARCH_ERROR,
   ENTITY_ERROR,
-  GET_ENTITIES,
   GET_ENTITY,
-  GET_ENTITY_LIST_PRELOAD,
   GET_ENTITY_LOAD,
   GET_METADATA_LIST,
   LOADING_FINISHED,
@@ -17,46 +15,6 @@ import {
 } from "./types";
 import store from "../store";
 import {wscSend} from "../utils/webSocketClient";
-
-// Get entries
-export const getEntitiesOfGroup = (group, project) => async dispatch => {
-  try {
-    dispatch({
-      type: GET_ENTITY_LIST_PRELOAD,
-      payload: group
-    });
-
-    let res = null;
-    let dtype = GET_ENTITIES;
-    res = await axios.get(`/api/entities/metadata/list/${group}/${project}`);
-    dispatch({
-      type: dtype,
-      payload: {data: res.data, group: group}
-    });
-  } catch (err) {
-    console.log(err);
-    dispatch({
-      type: ENTITY_ERROR,
-      payload: {msg: err.response}
-    });
-  }
-};
-
-export const changeEntitiesGroup = (group, project) => async dispatch => {
-  try {
-    // dispatch({
-    //   type: RESET_CURRENT_ENTITY,
-    //   payload: null
-    // });
-    dispatch(getEntitiesOfGroup(group, project));
-  } catch (err) {
-    console.log(err);
-    dispatch({
-      type: ENTITY_ERROR,
-      payload: {msg: err.response}
-    });
-  }
-};
 
 export const replaceMaterial = entity => async dispatch => {
   try {
@@ -336,66 +294,6 @@ export const addTagsToEntity = (id, tags) => async dispatch => {
     dispatch({
       type: ENTITY_ERROR,
       payload: {msg: err.response, status: err.response}
-    });
-  }
-};
-
-const placeHolderEntityMaker = group => {
-  return "entities/placeholder/" + group;
-};
-
-// Add post
-export const addEntity = (fileName, fileData, group) => async dispatch => {
-  try {
-    dispatch({
-      type: GET_ENTITY_LOAD,
-      payload: fileName
-    });
-
-    const octet = {
-      headers: {
-        "Content-Type": "application/octet-stream"
-      }
-    };
-    const urlEnc = encodeURIComponent(fileName);
-    console.log("Url encoded resource: ", urlEnc);
-    await axios.post("/api/fs/entity_to_elaborate/" + group + "/" + urlEnc,
-      fileData,
-      octet
-    );
-  } catch (err) {
-    console.log(err);
-    dispatch({
-      type: ENTITY_ERROR,
-      payload: {msg: err.response}
-    });
-  }
-};
-
-export const addPlaceHolderEntity = group => async dispatch => {
-  try {
-    dispatch({
-      type: GET_ENTITY_LOAD,
-      payload: group
-    });
-
-    const res = await axios.post(placeHolderEntityMaker(group));
-
-    const entityFull = {
-      entity: res.data,
-      blobURL: null
-    };
-
-    dispatch({
-      type: GET_ENTITY,
-      payload: entityFull,
-      requirePlaceHolder: true
-    });
-  } catch (err) {
-    console.log(err);
-    dispatch({
-      type: ENTITY_ERROR,
-      payload: {msg: err.response}
     });
   }
 };

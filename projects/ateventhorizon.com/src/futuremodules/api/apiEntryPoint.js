@@ -1,6 +1,6 @@
 import {apiStatusResponse, isStatusCodeAny400, isStatusCodeSuccessful} from "./apiStatus";
 import {useGlobal} from "reactn";
-import {getRandomMovieQuote} from "./apiMovieQuotes";
+import {getRandomMovieQuote} from "../warningsmoviequotes/warningMovieQuotes";
 
 export const setAlert = (store, title, text, type) => {
   store({

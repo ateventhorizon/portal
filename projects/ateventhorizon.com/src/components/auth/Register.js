@@ -1,7 +1,7 @@
 import React, {Fragment, useState} from "react";
 import {Link, Redirect} from "react-router-dom";
-import {api, movieWarning, useApi} from "../../api/apiEntryPoint";
-import {registerUser} from "../../api/auth";
+import {api, movieWarning, useApi} from "../../futuremodules/api/apiEntryPoint";
+import {registerUser} from "../../futuremodules/auth/authApiCalls";
 
 const Register = () => {
   const [formData, setFromData] = useState({

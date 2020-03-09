@@ -13,8 +13,8 @@ import store from "./store";
 
 import "./App.css";
 import {initGlobalStorage} from "./globalstorage/GlobalStorage";
-import {api, useApiSilent} from "./api/apiEntryPoint";
-import {loadUser} from "./api/auth";
+import {api, useApiSilent} from "./futuremodules/api/apiEntryPoint";
+import {loadUser} from "./futuremodules/auth/authApiCalls";
 // import WasmCanvas from "./localwasm";
 
 initHostEnv();

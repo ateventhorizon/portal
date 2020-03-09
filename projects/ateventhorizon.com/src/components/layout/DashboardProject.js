@@ -21,6 +21,7 @@ import {createPlaceHolder, getFullEntity} from "../../actions/entities";
 import {Redirect} from "react-router-dom";
 import {useGlobal} from "reactn";
 import WasmCanvas from "react-wasm-canvas";
+import {ReactWasm} from "../../globalstorage/GlobalStorage";
 
 const containerClassFromGroup = (currEntity, group) => {
   switch (group) {
@@ -66,7 +67,7 @@ const DashboardProject = () => {
   let canvasContainer = React.useRef(null);
   const [auth,] = useGlobal('auth');
   const [entities,entitiesStore] = useGlobal('entities');
-  const wasmDispatcher = useGlobal('reactWasm');
+  const wasmDispatcher = useGlobal(ReactWasm);
 
   const currentEntity = entities ? entities.currentEntity : null;
   const group = entities ? entities.groupSelected : null;

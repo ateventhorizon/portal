@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import Spinner from "../Spinner";
+import Spinner from "../../../futuremodules/spinner/Spinner";
 import EntityUpdateContent from "./EntityUpdateContent";
 import EntityMetaSection from "./EntityMetaSection";
 

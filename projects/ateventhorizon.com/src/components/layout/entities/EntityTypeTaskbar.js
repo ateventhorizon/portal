@@ -1,5 +1,4 @@
-import React, {Fragment, useEffect, useState} from "react";
-import {changeEntitiesGroup, getEntitiesOfGroup, getFullEntity} from "../../../actions/entities";
+import React, {Fragment, useEffect} from "react";
 import {
   GroupFont,
   GroupGeom,
@@ -12,6 +11,9 @@ import {
 import EntitiesThumbHandler from "./EntitiesThumbHandler";
 import EntityDragAndImport from "./EntityDragAndImport";
 import {useGlobal} from "reactn";
+import {api, useApi} from "../../../futuremodules/api/apiEntryPoint";
+import {getEntitiesOfGroup} from "../../../apicalls/entities";
+import {Auth, Currents, Entities} from "../../../globalstorage/GlobalStorage";
 
 // const AppStrID = "Apps";
 const ScriptStrID = "Scripts";
@@ -24,21 +26,18 @@ const VectorsStrID = "Vectors";
 const ColorsStrID = "Colors";
 
 const EntityTypeTaskBar = () => {
-  const [currentGroup, setCurrentGroup] = useState("default");
-  const [auth] = useGlobal('auth');
-  const [entities] = useGlobal('entities');
-  const entries = entities ? entities.entriesFiltered : null;
-  const currentEntity = entities ? entities.currentEntity : null;
+  const apiEntities = useApi(Entities);
+  const [auth] = useGlobal(Auth);
+  const [entries] = useGlobal(Entities);
+  const [currents, setCurrents] = useGlobal(Currents);
+  const currentEntity = currents.currentEntity;
+  const currentGroup = currents.currentGroup;
 
   useEffect(() => {
-    if ( currentGroup === "default") {
-      const groupId = GroupScript;
-      setCurrentGroup(groupId);
-      getEntitiesOfGroup(groupId, auth.project);
-    }
-  }, [currentGroup, auth]);
+    // getEntitiesOfGroup(currentGroup, auth.project);
+  }, []);
 
-  const viewMore = group => () => {
+  const viewMore = group => async () => {
     let groupId = "";
     if (group === ScriptStrID) groupId = GroupScript;
     if (group === ObjectsStrID) groupId = GroupGeom;
@@ -49,8 +48,14 @@ const EntityTypeTaskBar = () => {
     if (group === VectorsStrID) groupId = GroupProfile;
     if (group === ColorsStrID) groupId = "color_scheme";
     if (currentGroup !== groupId) {
-      setCurrentGroup(groupId);
-      changeEntitiesGroup(groupId, auth.project);
+      setCurrents({...currents, currentGroup: groupId} );
+      api( apiEntities, getEntitiesOfGroup, groupId, auth.project);
+      // groupSelected: payload,
+      //   loading: true,
+      //   currentTags: [],
+      //   entriesFiltered: [],
+      //   entries: []
+
       // return <Redirect to="/dashboard/material" />;
     }
   };
@@ -78,7 +83,7 @@ const EntityTypeTaskBar = () => {
             <EntitiesThumbHandler
               currentEntity={currentEntity}
               entries={entries}
-              onClicked={getFullEntity}
+              // onClicked={getFullEntity}
               group={currentGroup}
             />
           </Fragment>

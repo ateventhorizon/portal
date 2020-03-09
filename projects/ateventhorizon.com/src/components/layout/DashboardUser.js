@@ -1,15 +1,15 @@
 import React, {Fragment, useState} from "react";
 import {Redirect} from "react-router-dom";
 import {Button, Dropdown, FormControl, InputGroup, SplitButton} from "react-bootstrap";
-import {alertIfSuccessful, api, useApi} from "../../api/apiEntryPoint";
-import {logoutUser} from "../../api/auth";
+import {alertIfSuccessful, api, useApi} from "../../futuremodules/api/apiEntryPoint";
+import {logoutUser} from "../../futuremodules/auth/authApiCalls";
 import {
   acceptInvitationToJoinProject,
   createProject,
   declineInvitationToJoinProject,
   loginIntoProject,
   sendInvitationToProject
-} from "../../api/project";
+} from "../../futuremodules/auth/projectApiCalls";
 
 const DashboardUser = () => {
 

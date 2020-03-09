@@ -5,19 +5,19 @@ import Login from "../auth/Login";
 import DashboardUser from "../layout/DashboardUser";
 import DashboardProject from "../layout/DashboardProject";
 import NotFound from "../layout/NotFound";
-import AlertContainer from "../layout/AlertContainer";
+import {EHAlert} from "../../futuremodules/alerts/alerts";
 
 const Routes = () => {
   return (
     <Fragment>
-      <AlertContainer />
-        <Switch>
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/dashboarduser" component={DashboardUser} />
-          <Route exact path="/dashboardproject" component={DashboardProject} />
-          <Route component={NotFound} />
-        </Switch>
+      <Switch>
+        <Route exact path="/register" component={Register}/>
+        <Route exact path="/login" component={Login}/>
+        <Route exact path="/dashboarduser" component={DashboardUser}/>
+        <Route exact path="/dashboardproject" component={DashboardProject}/>
+        <Route component={NotFound}/>
+      </Switch>
+      <EHAlert/>
     </Fragment>
   );
 };
