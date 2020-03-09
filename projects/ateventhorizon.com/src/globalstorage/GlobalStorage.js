@@ -4,6 +4,7 @@ export const initGlobalStorage = () => setGlobal({
   confirmAlert: null,
   notificationAlert: null,
   auth: null,
-  entities: null
+  entities: null,
+  reactWasm: null
 });
 

@@ -1,5 +1,4 @@
-import React, {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import React from "react";
 import Entries from "./entities/Entries";
 import ImageEditor from "./entities/ImageEditor";
 import AppEditor from "./entities/AppEditor";
@@ -7,7 +6,6 @@ import GUIEditor from "./entities/GUIEditor";
 import GeomEditor from "./entities/GeomEditor";
 import FontEditor from "./entities/FontEditor";
 import MaterialEditor from "./entities/MaterialEditor";
-import {wasmSetCanvasSize, wasmSetCanvasVisibility} from "react-wasm-canvas";
 import EntityMetaSection from "./entities/EntityMetaSection";
 import RenderParamsToolbar from "./entities/RenderParamsToolbar";
 import {
@@ -22,6 +20,7 @@ import {
 import {createPlaceHolder, getFullEntity} from "../../actions/entities";
 import {Redirect} from "react-router-dom";
 import {useGlobal} from "reactn";
+import WasmCanvas from "react-wasm-canvas";
 
 const containerClassFromGroup = (currEntity, group) => {
   switch (group) {
@@ -65,23 +64,14 @@ const containerClassFromGroup = (currEntity, group) => {
 
 const DashboardProject = () => {
   let canvasContainer = React.useRef(null);
-  const dispatch = useDispatch();
   const [auth,] = useGlobal('auth');
-  const [entities,] = useGlobal('entities');
+  const [entities,entitiesStore] = useGlobal('entities');
+  const wasmDispatcher = useGlobal('reactWasm');
 
   const currentEntity = entities ? entities.currentEntity : null;
   const group = entities ? entities.groupSelected : null;
-  const hasResized = useSelector(state => state.wasm.resize);
-
-  useEffect(() => {
-    if (canvasContainer.current) {
-      const rect = canvasContainer.current.getBoundingClientRect();
-      dispatch(wasmSetCanvasSize(rect));
-    }
-    if (auth === null || (auth && auth.project === null)) {
-      dispatch(wasmSetCanvasVisibility('hidden'));
-    }
-  }, [auth, hasResized, dispatch]);
+  const wwwPrefixToAvoidSSLMadness = process.env.REACT_APP_EH_CLOUD_HOST === 'localhost' ? "" : "www.";
+  let wasmArgumentList = [`hostname=${wwwPrefixToAvoidSSLMadness}${process.env.REACT_APP_EH_CLOUD_HOST}`];
 
   if (auth === null) {
     return <Redirect to="/"></Redirect>
@@ -91,13 +81,11 @@ const DashboardProject = () => {
     return <Redirect to="/dashboarduser"></Redirect>
   }
 
-  dispatch(wasmSetCanvasVisibility('visible'));
-
   if (group === GroupScript) {
     if (entities.length >= 1 && !currentEntity) {
-      dispatch(getFullEntity(entities[0]));
+      entitiesStore(getFullEntity(entities[0]));
     } else if (!currentEntity) {
-      dispatch(createPlaceHolder(group));
+      entitiesStore(createPlaceHolder(group));
     }
   }
 
@@ -106,7 +94,6 @@ const DashboardProject = () => {
     group
   );
 
-// const bUseEntityUpdate = groupHasUpdateFacility(currentEntity, group);
   const bShowMetaSection = groupHasMetadataSection(currentEntity, group);
 
   const entityName = (
@@ -121,7 +108,19 @@ const DashboardProject = () => {
     <div className={mainContainerClass}>
       {entityName}
       <RenderParamsToolbar/>
-      <div className="EntryEditorRender" ref={canvasContainer}></div>
+      <div className="EntryEditorRender" ref={canvasContainer}>
+        <WasmCanvas
+          wasmName="editor"
+          dispatcher={wasmDispatcher}
+          canvasContainer={canvasContainer.current}
+          initialRect={{top: 0, left: 0, width: 0, height: 0}}
+          initialVisibility={false}
+          argumentList={wasmArgumentList}
+          padding="1px"
+          borderRadius="5px"
+          mandatoryWebGLVersionSupporNumber="webgl2"
+        />
+      </div>
       {currentEntity && mainContainerDiv}
       {bShowMetaSection && <EntityMetaSection/>}
     </div>

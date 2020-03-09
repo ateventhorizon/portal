@@ -12,7 +12,6 @@ import {Provider} from "react-redux";
 import store from "./store";
 
 import "./App.css";
-import WasmCanvas from "react-wasm-canvas";
 import {initGlobalStorage} from "./globalstorage/GlobalStorage";
 import {api, useApiSilent} from "./api/apiEntryPoint";
 import {loadUser} from "./api/auth";
@@ -24,8 +23,8 @@ initDB(DBConfig);
 
 const App = () => {
 
-  const wwwPrefixToAvoidSSLMadness = process.env.REACT_APP_EH_CLOUD_HOST === 'localhost' ? "" : "www.";
-  let wasmArgumentList = [`hostname=${wwwPrefixToAvoidSSLMadness}${process.env.REACT_APP_EH_CLOUD_HOST}`];
+  // const wwwPrefixToAvoidSSLMadness = process.env.REACT_APP_EH_CLOUD_HOST === 'localhost' ? "" : "www.";
+  // let wasmArgumentList = [`hostname=${wwwPrefixToAvoidSSLMadness}${process.env.REACT_APP_EH_CLOUD_HOST}`];
 
   const authApi = useApiSilent('auth');
   useEffect(() => {
@@ -38,13 +37,6 @@ const App = () => {
   return (
     <Provider store={store}>
       <Router>
-        <WasmCanvas
-          wasmName="editor"
-          argumentList={wasmArgumentList}
-          padding="1px"
-          borderRadius="5px"
-          mandatoryWebGLVersionSupporNumber="webgl2"
-        ></WasmCanvas>
         <Navbar/>
         <Fragment>
           <Switch>
