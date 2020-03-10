@@ -1,6 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
 
 const moment = require("moment");
 
@@ -66,12 +64,4 @@ const EntityInfo = ({currentEntity}) => {
   );
 };
 
-EntityInfo.propTypes = {
-  currentEntity: PropTypes.object
-};
-
-const mapStateToProps = state => ({
-  currentEntity: state.entities.currentEntity
-});
-
-export default connect(mapStateToProps)(EntityInfo);
+export default EntityInfo;

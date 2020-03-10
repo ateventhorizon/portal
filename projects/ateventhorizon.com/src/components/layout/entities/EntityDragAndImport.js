@@ -15,7 +15,7 @@ import {
 import {useGlobal} from "reactn";
 import {alertWarning} from "../../../futuremodules/alerts/alerts";
 import {api, useApi} from "../../../futuremodules/api/apiEntryPoint";
-import {addEntity, addPlaceHolderEntity} from "../../../apicalls/entities";
+import {addEntity, addPlaceHolderEntity} from "../../../futuremodules/entities/entitiesApiCalls";
 
 // const streams = require("memory-streams");
 const tar = require("tar-stream");

@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from "react";
+import React, {Fragment} from "react";
 import {
   GroupFont,
   GroupGeom,
@@ -12,8 +12,10 @@ import EntitiesThumbHandler from "./EntitiesThumbHandler";
 import EntityDragAndImport from "./EntityDragAndImport";
 import {useGlobal} from "reactn";
 import {api, useApi} from "../../../futuremodules/api/apiEntryPoint";
-import {getEntitiesOfGroup} from "../../../apicalls/entities";
-import {Auth, Currents, Entities} from "../../../globalstorage/GlobalStorage";
+import {getEntitiesOfGroup} from "../../../futuremodules/entities/entitiesApiCalls";
+import {Currents, Entities} from "../../../globalstorage/GlobalStorage";
+import {setCurrentGroup, useGetCurrentGroup} from "../../../futuremodules/entities/entitiesAccessors";
+import {useGetProject} from "../../../futuremodules/auth/authAccessors";
 
 // const AppStrID = "Apps";
 const ScriptStrID = "Scripts";
@@ -27,15 +29,13 @@ const ColorsStrID = "Colors";
 
 const EntityTypeTaskBar = () => {
   const apiEntities = useApi(Entities);
-  const [auth] = useGlobal(Auth);
-  const [entries] = useGlobal(Entities);
-  const [currents, setCurrents] = useGlobal(Currents);
-  const currentEntity = currents.currentEntity;
-  const currentGroup = currents.currentGroup;
+  const currents = useGlobal(Currents);
+  const currentGroup = useGetCurrentGroup();
+  const project = useGetProject();
 
-  useEffect(() => {
-    // getEntitiesOfGroup(currentGroup, auth.project);
-  }, []);
+  // useEffect(() => {
+  //   // getEntitiesOfGroup(currentGroup, auth.project);
+  // }, []);
 
   const viewMore = group => async () => {
     let groupId = "";
@@ -48,8 +48,8 @@ const EntityTypeTaskBar = () => {
     if (group === VectorsStrID) groupId = GroupProfile;
     if (group === ColorsStrID) groupId = "color_scheme";
     if (currentGroup !== groupId) {
-      setCurrents({...currents, currentGroup: groupId} );
-      api( apiEntities, getEntitiesOfGroup, groupId, auth.project);
+      setCurrentGroup(currents, groupId);
+      api( apiEntities, getEntitiesOfGroup, groupId, project);
       // groupSelected: payload,
       //   loading: true,
       //   currentTags: [],
@@ -79,13 +79,8 @@ const EntityTypeTaskBar = () => {
         </div>
         {selected && (
           <Fragment>
-            <EntityDragAndImport />
-            <EntitiesThumbHandler
-              currentEntity={currentEntity}
-              entries={entries}
-              // onClicked={getFullEntity}
-              group={currentGroup}
-            />
+            <EntityDragAndImport/>
+            <EntitiesThumbHandler/>
           </Fragment>
         )}
       </div>

@@ -1,16 +1,12 @@
 // Add post
 import axios from "axios";
+import {octetStreamHeader} from "../api/apiEntryPoint";
 
 export const addEntity = async (fileName, fileData, group)  => {
-  const octet = {
-    headers: {
-      "Content-Type": "application/octet-stream"
-    }
-  };
   const urlEnc = encodeURIComponent(fileName);
   await axios.post("/api/fs/entity_to_elaborate/" + group + "/" + urlEnc,
     fileData,
-    octet
+    octetStreamHeader()
   );
 };
 

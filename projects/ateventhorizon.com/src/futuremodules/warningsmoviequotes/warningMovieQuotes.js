@@ -14,8 +14,8 @@ const randomMovieQuotes = [
   "E.T. phone home.",
   "Gentlemen, it has been a privilege playing with you tonight",
   "I'll never let go. I'll never let go, Jack.",
-  "The destruction might in fact be very localised, limited to merely our own galaxy",
-  "the result of which could cause a chain reaction that would unravel the very fabric of the spacetime continuum",
+  "The destruction might in fact be very localised, limited to merely our own galaxy.",
+  "the result of which could cause a chain reaction that would unravel the very fabric of the spacetime continuum.",
   "There's only one man who can help me!",
   "I know a guy... Who knows a guy who knows another guy..."
 ];

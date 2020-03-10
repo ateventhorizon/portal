@@ -1,8 +1,8 @@
 import React, {Fragment, useState} from "react";
 import {Link, Redirect} from "react-router-dom";
 
-import {api, useApi} from "../../futuremodules/api/apiEntryPoint";
-import {loginUser} from "../../futuremodules/auth/authApiCalls";
+import {api, useApi} from "../../api/apiEntryPoint";
+import {loginUser} from "../authApiCalls";
 
 const Login = () => {
   const [formData, setFromData] = useState({

@@ -1,26 +1,32 @@
-import React, { Fragment, useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { Controlled as CodeMirror } from "react-codemirror2";
+import React, {Fragment, useEffect, useState} from "react";
+import {Controlled as CodeMirror} from "react-codemirror2";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
-import { useIndexedDB } from "react-indexed-db";
+import {useIndexedDB} from "react-indexed-db";
+import {useGetCurrentEntity} from "../../../futuremodules/entities/entitiesAccessors";
+import {useGetProject, useGetUser} from "../../../futuremodules/auth/authAccessors";
 
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/material.css");
 require("codemirror/theme/neat.css");
 require("codemirror/mode/lua/lua.js");
 
-const AppEditor = ({ currentEntity, userData, wasmLogs, wasmOutputDirty }) => {
+const AppEditor = () => {
   const { getAll, add, update } = useIndexedDB("files");
   const [fileData, setFileData] = useState(null);
   const [fileC, setFileC] = useState(null);
   const [consoleArrayLogs, setConsoleArrayLogs] = useState([]);
 
+  const currentEntity = useGetCurrentEntity();
+  const userData = useGetUser();
+  const project = useGetProject();
+  const wasmLogs = [];
+  const wasmOutputDirty = false;
+
   useEffect(() => {
     if (
       userData !== null &&
-      userData.project !== null &&
+      project !== null &&
       currentEntity !== null &&
       currentEntity.entity !== null &&
       userData.user !== null &&
@@ -30,7 +36,7 @@ const AppEditor = ({ currentEntity, userData, wasmLogs, wasmOutputDirty }) => {
       getAll().then(filesFromDb => {
         filesFromDb.some(fileFromDb => {
           if (
-            fileFromDb.project === userData.project &&
+            fileFromDb.project === project &&
             fileFromDb.file === currentEntity.entity.name &&
             fileFromDb.user === userData.user.email
           ) {
@@ -50,7 +56,8 @@ const AppEditor = ({ currentEntity, userData, wasmLogs, wasmOutputDirty }) => {
     consoleArrayLogs,
     wasmLogs,
     wasmOutputDirty,
-    getAll
+    getAll,
+    project
   ]);
 
   if (!currentEntity) return <Fragment></Fragment>;
@@ -70,7 +77,7 @@ const AppEditor = ({ currentEntity, userData, wasmLogs, wasmOutputDirty }) => {
     if (fileData === null) {
       // console.log("ADD NEW FILE");
       add({
-        project: userData.project,
+        project: project,
         app: currentEntity.entity.mKey,
         file: currentEntity.entity.name,
         user: userData.user.email,
@@ -79,7 +86,7 @@ const AppEditor = ({ currentEntity, userData, wasmLogs, wasmOutputDirty }) => {
         event => {
           let updatedFileData = {
             id: event,
-            project: userData.project,
+            project: project,
             app: currentEntity.entity.mKey,
             file: currentEntity.entity.name,
             user: userData.user.email,
@@ -162,21 +169,4 @@ const AppEditor = ({ currentEntity, userData, wasmLogs, wasmOutputDirty }) => {
   );
 };
 
-AppEditor.propTypes = {
-  currentEntity: PropTypes.object,
-  userData: PropTypes.object,
-  wasmLogs: PropTypes.array,
-  wasmOutputDirty: PropTypes.bool
-};
-
-const mapStateToProps = state => ({
-  currentEntity: state.entities.currentEntity,
-  userData: state.auth.userdata,
-  wasmLogs: state.wasm.consoleOutput,
-  wasmOutputDirty: state.wasm.consoleOutputDirty
-});
-
-export default connect(
-  mapStateToProps,
-  {}
-)(AppEditor);
+export default AppEditor;

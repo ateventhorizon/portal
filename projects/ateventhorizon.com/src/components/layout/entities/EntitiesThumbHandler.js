@@ -1,22 +1,22 @@
-import React, { Fragment } from "react";
-import { decode } from "base64-arraybuffer";
+import React, {Fragment} from "react";
+import {decode} from "base64-arraybuffer";
+import {checkCommonFileExtension, entityTypeSelector} from "../../../utils/utils";
 import {
-  entityTypeSelector,
-  checkCommonFileExtension
-} from "../../../utils/utils";
-import store from "../../../store";
+  useGetCurrentEntity,
+  useGetCurrentGroup,
+  useGetEntities
+} from "../../../futuremodules/entities/entitiesAccessors";
 
-const EntitiesThumbHandler = (props) => {
+const EntitiesThumbHandler = () => {
 
-  const currentEntity = props.currentEntity;
-  const entries = props.entries;
-  const onClicked = props.onClicked;
-  const group = props.group;
+  const currentEntity = useGetCurrentEntity();
+  const group = useGetCurrentGroup();
+  const [entries] = useGetEntities();
 
-  // console.log("###Current entity: ", currentEntity);
   let entitiesRes = [];
-  if (entries && entries.length > 0) {
-    entries.map(e => {
+  if (entries) {
+    const entities = entries.metadata.entities;
+    for ( const e of entities ) {
       if ( e.group === group ) {
         let entryWithThumb = e;
         if (e.thumb && !e.thumb.startsWith("blob:")) {
@@ -31,13 +31,14 @@ const EntitiesThumbHandler = (props) => {
         entryWithThumb.entityId = e._id;
         entitiesRes.push(entryWithThumb);
       }
-      return 0;
-    });
+    }
   }
 
-  const viewMore = entityToRender => () => {
+  const loadFullEntity = entityToRender => () => {
     console.log( "Entity callback: ", entityToRender);
-    store.dispatch(onClicked(entityToRender, props.callbackProps));
+    window.Module.addScriptLine(
+      `rr.addSceneObject( "${entityToRender._id}", "${entityToRender.group}", "${entityToRender.hash}" )`
+    );
   };
 
   let displayNames = {};
@@ -57,7 +58,7 @@ const EntitiesThumbHandler = (props) => {
   return (
     <Fragment>
       {entitiesRes.map(entry => (
-        <div className={entry.cname} key={entry._id} onClick={viewMore(entry)}>
+        <div className={entry.cname} key={entry._id} onClick={loadFullEntity(entry)}>
           <div className="EntityThumbnailInset">
             {entityTypeSelector(entry)}
           </div>
@@ -72,7 +73,7 @@ const EntitiesThumbHandler = (props) => {
             </span>
             <span className="text-secondary-alt">
               {entry.creator
-                ? entry.creator.name
+                ? entry.creator.username
                 : entry.project}
             </span>
           </div>

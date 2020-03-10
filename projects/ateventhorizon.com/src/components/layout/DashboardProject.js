@@ -75,11 +75,11 @@ const DashboardProject = () => {
   let wasmArgumentList = [`hostname=${wwwPrefixToAvoidSSLMadness}${process.env.REACT_APP_EH_CLOUD_HOST}`];
 
   if (auth === null) {
-    return <Redirect to="/"></Redirect>
+    return <Redirect to="/"/>
   }
 
   if (auth && auth.project === null) {
-    return <Redirect to="/dashboarduser"></Redirect>
+    return <Redirect to="/dashboarduser"/>
   }
 
   if (group === GroupScript) {

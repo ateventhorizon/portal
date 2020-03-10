@@ -1,6 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
-import store from "../../../store";
 
 const EntitiesSearchBox = ({
   updatePartialSearch,
@@ -16,11 +14,12 @@ const EntitiesSearchBox = ({
         id="search-bar"
         placeholder={placeHolderText}
         onChange={e => {
-          store.dispatch(updatePartialSearch(e.target.value.toLowerCase()));
+          // eslint-reimplement
+          //updatePartialSearch(e.target.value.toLowerCase());
         }}
       />
     </div>
   );
 };
 
-export default connect()(EntitiesSearchBox);
+export default EntitiesSearchBox;

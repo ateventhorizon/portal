@@ -10,10 +10,7 @@ export const initGlobalStorage = () => setGlobal({
   notificationAlert: null,
   auth: null,
   entities: null,
-  currents: {
-    currentEntity : null,
-    currentGroup : null
-  },
+  currents: null,
   reactWasm: null
 });
 

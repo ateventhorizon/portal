@@ -18,6 +18,14 @@ export const movieWarning = (store, title) => {
   });
 }
 
+export const octetStreamHeader = () => {
+  return {
+    headers: {
+      "Content-Type": "application/octet-stream"
+    }
+  }
+}
+
 const tryToGetRealStatusCodeFromException = msg => {
   let code = 500;
   const checker = " status code ";
@@ -78,9 +86,7 @@ export const useApiSilent = (name) => {
 };
 
 export const alertIfSuccessful = (res, alertStore, title, text) => {
-
   if (res.isSuccessful) {
     return setAlert(alertStore, title, text, "success")
   }
-
 };

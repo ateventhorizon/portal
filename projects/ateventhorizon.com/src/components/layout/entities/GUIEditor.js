@@ -1,10 +1,10 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import { updateAsset } from "../../../utils/webSocketClient";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
+import {useGetCurrentEntity, useGetCurrentEntityData} from "../../../futuremodules/entities/entitiesAccessors";
 
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/material.css");
@@ -24,10 +24,8 @@ const removeEmpty = obj => {
 const GUIEditor = () => {
   const [fileC, setFileC] = useState(null);
 
-  const currentEntityData = useSelector(
-    state => state.entities.currentEntityData
-  );
-  const currentEntity = useSelector(state => state.entities.currentEntity);
+  const currentEntityData = useGetCurrentEntityData();
+  const currentEntity = useGetCurrentEntity();
 
   useEffect(() => {
     if (currentEntityData) {

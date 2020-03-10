@@ -6,6 +6,16 @@ export const useGetAuth = () => {
   return useGlobal(Auth);
 }
 
+export const getUser = authContainer => {
+  const [auth] = authContainer;
+  return auth ? auth.user : null;
+};
+
+export const useGetUser = () => {
+  const [auth] = useGlobal(Auth);
+  return auth ? auth.user : null;
+};
+
 export const getUserName = authContainer => {
   const [auth] = authContainer;
   return auth ? auth.user.name : null;
@@ -37,3 +47,8 @@ export const logoffFromProject = authContainer => {
     project: null
   })
 };
+
+export const useHasUser = () => {
+  const [auth] = useGlobal(Auth);
+  return (auth !== null);
+}

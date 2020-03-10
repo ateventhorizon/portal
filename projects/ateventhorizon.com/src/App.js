@@ -8,34 +8,24 @@ import {initHostEnv} from "./HostEnv";
 
 import {DBConfig} from "./DBConfig";
 import {initDB} from "react-indexed-db";
-import {Provider} from "react-redux";
-import store from "./store";
 
 import "./App.css";
-import {initGlobalStorage} from "./globalstorage/GlobalStorage";
+import {Auth, initGlobalStorage} from "./globalstorage/GlobalStorage";
 import {api, useApiSilent} from "./futuremodules/api/apiEntryPoint";
 import {loadUser} from "./futuremodules/auth/authApiCalls";
-// import WasmCanvas from "./localwasm";
 
 initHostEnv();
 initGlobalStorage();
 initDB(DBConfig);
 
 const App = () => {
-
-  // const wwwPrefixToAvoidSSLMadness = process.env.REACT_APP_EH_CLOUD_HOST === 'localhost' ? "" : "www.";
-  // let wasmArgumentList = [`hostname=${wwwPrefixToAvoidSSLMadness}${process.env.REACT_APP_EH_CLOUD_HOST}`];
-
-  const authApi = useApiSilent('auth');
+  const authApi = useApiSilent(Auth);
   useEffect(() => {
     api( authApi, loadUser );
-    return () => {
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <Provider store={store}>
       <Router>
         <Navbar/>
         <Fragment>
@@ -45,7 +35,6 @@ const App = () => {
           </Switch>
         </Fragment>
       </Router>
-    </Provider>
   );
 };
 

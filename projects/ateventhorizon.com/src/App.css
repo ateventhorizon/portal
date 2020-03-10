@@ -1331,7 +1331,6 @@ input[type="color"]:hover {
 /* Landing Page */
 .landing {
   position: relative;
-  background: url("./img/bg.jpg") no-repeat center center/cover;
   height: 100vh;
 }
 

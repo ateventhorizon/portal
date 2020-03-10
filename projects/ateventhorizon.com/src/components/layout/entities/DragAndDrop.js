@@ -1,23 +1,20 @@
-import React, { useCallback } from "react";
-import { useDispatch } from "react-redux";
-import { useDropzone } from "react-dropzone";
-import { updateTextureParameterOnMaterial } from "actions/entities";
-import { checkFileExtensionsOnEntityGroup, GroupImage } from "utils/utils";
-import {SET_MODAL_SELECTED_ENTITY_NAME} from "actions/types";
+import React, {useCallback} from "react";
+import {useDropzone} from "react-dropzone";
+import {checkFileExtensionsOnEntityGroup, GroupImage} from "utils/utils";
 
 const DragAndDrop = props => {
-  const dispatch = useDispatch();
 
   const updateMaterialTextureCallback = () => {
-    dispatch({
-      type: SET_MODAL_SELECTED_ENTITY_NAME,
-      payload: {
-        group:props.entry.groupName,
-        fatherEntityName: props.entry.key_id,
-        onClickCallback: updateTextureParameterOnMaterial,
-        selectedModalEntityName: props.entry.inputTextureName
-      }
-    });
+    //eslint-reimplement
+    // dispatch({
+    //   type: SET_MODAL_SELECTED_ENTITY_NAME,
+    //   payload: {
+    //     group:props.entry.groupName,
+    //     fatherEntityName: props.entry.key_id,
+    //     onClickCallback: updateTextureParameterOnMaterial,
+    //     selectedModalEntityName: props.entry.inputTextureName
+    //   }
+    // });
   };
 
   const onDrop = useCallback(

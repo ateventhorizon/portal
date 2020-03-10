@@ -1,13 +1,10 @@
-import React, { useEffect, Fragment } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import React, {Fragment} from "react";
 import Table from "react-bootstrap/Table";
 
-const ImageEditor = ({ currentEntityData }) => {
-  useEffect(() => {
-    return () => {};
-  }, [currentEntityData]);
+const ImageEditor = () => {
 
+  // eslint-reimplement
+  const currentEntityData = {};
   if (!currentEntityData) return <Fragment></Fragment>;
 
   return (
@@ -78,15 +75,4 @@ const ImageEditor = ({ currentEntityData }) => {
   );
 };
 
-ImageEditor.propTypes = {
-  currentEntityData: PropTypes.object
-};
-
-const mapStateToProps = state => ({
-  currentEntityData: state.entities.currentEntityData
-});
-
-export default connect(
-  mapStateToProps,
-  {}
-)(ImageEditor);
+export default ImageEditor;

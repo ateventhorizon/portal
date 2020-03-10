@@ -3,8 +3,8 @@ import EntityUpdateContent from "./EntityUpdateContent";
 import EntityTags from "./EntityTags";
 import EntityInfo from "./EntityInfo";
 import {useGlobal} from 'reactn';
-import {useSelector} from "react-redux";
 import axios from "axios";
+import {useGetCurrentEntity} from "../../../futuremodules/entities/entitiesAccessors";
 
 const deleteEntity = async (id) =>  {
   try {
@@ -18,10 +18,9 @@ const EntityMetaSection = () => {
 
 // eslint-disable-next-line
 //   const [currEntity, setCurrEntity] = useGlobal('currEntity');
-  const currEntity = useSelector(state => state.entities.currentEntity);
-  const entity = currEntity ? currEntity.entity : null;
+  const entity = useGetCurrentEntity();
 // eslint-disable-next-line
-  const [confirmAlert, setConfirmAlert] = useGlobal('confirmAlert');
+  const [, setConfirmAlert] = useGlobal('confirmAlert');
 
   const onDeleteEntity = e => {
     setConfirmAlert({
@@ -41,7 +40,7 @@ const EntityMetaSection = () => {
       <EntityInfo/>
       <div className="entity-control-a">
         <EntityUpdateContent/>
-        <div className="my-3"></div>
+        <div className="my-3"/>
         {entity &&
         <div className="deleteentity-a">
           <input

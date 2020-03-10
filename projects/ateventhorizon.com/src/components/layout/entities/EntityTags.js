@@ -1,10 +1,13 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { addTagsToEntity } from "../../../actions/entities";
+import {addTagsToEntity} from "../../../actions/entities";
+import {useGetCurrentEntity} from "../../../futuremodules/entities/entitiesAccessors";
 const ReactTags = require("react-tag-autocomplete");
 
-const EntityTags = ({ currentEntity, tags, addTagsToEntity }) => {
+const EntityTags = () => {
+
+  const currentEntity = useGetCurrentEntity();
+  const tags = currentEntity ? currentEntity.tags : [];
+
   const handleDelete = i => {
     const ntags = tags.slice(0);
     ntags.splice(i, 1);
@@ -51,19 +54,4 @@ const EntityTags = ({ currentEntity, tags, addTagsToEntity }) => {
   );
 };
 
-EntityTags.propTypes = {
-  currentEntity: PropTypes.object,
-  tags: PropTypes.array,
-  addTagsToEntity: PropTypes.func.isRequired
-};
-
-const mapStateToProps = state => ({
-  currentEntity: state.entities.currentEntity,
-  tags: state.entities.currentTags ? state.entities.currentTags : [],
-  loading: state.auth.loading
-});
-
-export default connect(
-  mapStateToProps,
-  { addTagsToEntity }
-)(EntityTags);
+export default EntityTags;

@@ -1,9 +1,8 @@
 import React, {useCallback} from "react";
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
 import {useDropzone} from "react-dropzone";
 
-const EntityUpdateContent = ({ currentEntity }) => {
+const EntityUpdateContent = () => {
+
   const onDrop = useCallback(acceptedFiles => {
     const reader = new FileReader();
 
@@ -31,12 +30,4 @@ const EntityUpdateContent = ({ currentEntity }) => {
   );
 };
 
-EntityUpdateContent.propTypes = {
-  currentEntity: PropTypes.object
-};
-
-const mapStateToProps = state => ({
-  currentEntity: state.entities.currentEntity
-});
-
-export default connect(mapStateToProps)(EntityUpdateContent);
+export default EntityUpdateContent;

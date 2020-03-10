@@ -1,7 +1,7 @@
 import React, {Fragment} from "react";
 import {Route, Switch} from "react-router-dom";
-import Register from "../auth/Register";
-import Login from "../auth/Login";
+import Register from "../../futuremodules/auth/components/Register";
+import Login from "../../futuremodules/auth/components/Login";
 import DashboardUser from "../layout/DashboardUser";
 import DashboardProject from "../layout/DashboardProject";
 import NotFound from "../layout/NotFound";

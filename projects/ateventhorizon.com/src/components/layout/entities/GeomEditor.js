@@ -1,12 +1,12 @@
 import React, {Fragment} from "react";
-import {useSelector} from "react-redux";
 import SmallEntriesDialog from "./SmallEntriesDialog";
 import {fillMaterialParams} from "utils/materialUtils";
 import MaterialParametersEditor from "./MaterialParametersEditor";
+import {useGetCurrentEntityNodes} from "../../../futuremodules/entities/entitiesAccessors";
 
 const GeomEditor = () => {
 
-    const currentEntityNodes = useSelector(state => state.entities.currentEntityNodes);
+    const currentEntityNodes = useGetCurrentEntityNodes();
     let matSimples = [];
 
     // eslint-disable-next-line

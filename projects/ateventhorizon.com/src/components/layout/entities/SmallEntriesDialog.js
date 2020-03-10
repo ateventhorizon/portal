@@ -1,36 +1,29 @@
-import React, {Fragment, useEffect} from "react";
-import {useSelector, useDispatch} from "react-redux";
-import {
-  updateMetadataListPartialSearch,
-  getMetadataListOf
-} from "actions/entities";
-import { CLOSE_ENTITIES_MODAL } from "actions/types";
-
+import React, {Fragment, useState} from "react";
 import EntitiesSearchBox from "./EntitiesSearchBox";
 import EntitiesThumbHandler from "./EntitiesThumbHandler";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import {useGetEntities} from "../../../futuremodules/entities/entitiesAccessors";
+import {updateMetadataListPartialSearch} from "../../../actions/entities";
 
 const SmallEntriesDialog = () => {
 
-  const dispatch = useDispatch();
-  const metadataList = useSelector(state => state.entities.metadataList);
+  // eslint-reimplement
+  const metadataList = useGetEntities();
+  // eslint-reimplement
+  // useEffect(() => {
+  //   if ( metadataList.enable ) {
+  //     dispatch(getMetadataListOf(metadataList.group));
+  //   }
+  // }, [metadataList.enable, metadataList.group, dispatch]);
 
-  useEffect(() => {
-    if ( metadataList.enable ) {
-      dispatch(getMetadataListOf(metadataList.group));
-    }
-  }, [metadataList.enable, metadataList.group, dispatch]);
-
-  const closeModal = flag => {
-    dispatch({ type: CLOSE_ENTITIES_MODAL, payload: flag });
-  };
+  const [show, setShow] = useState(true);
 
   return (
-      !metadataList.enable ? <Fragment></Fragment> :
+      !metadataList.enable ? <Fragment/> :
     <Modal
-      show={metadataList.enable}
-      onHide={() => closeModal(false)}
+      show={show}
+      onHide={() => setShow(false)}
       size="sm"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -51,7 +44,7 @@ const SmallEntriesDialog = () => {
         <EntitiesThumbHandler entries={metadataList.filtered} onClicked={metadataList.onClickCallback} callbackProps={metadataList} />
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={() => closeModal(false)}>Close</Button>
+        <Button onClick={() => setShow(false)}>Close</Button>
       </Modal.Footer>
     </Modal>
   );
