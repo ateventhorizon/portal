@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
-import {alphaBool} from "../../../utils/utils";
+import {alphaBool} from "../../../futuremodules/utils/utils";
 
 const RenderParamsToolbar = () => {
   const [useSkybox, setUseSkybox] = useState(false);

@@ -4,9 +4,9 @@ import Landing from "./components/layout/Landing";
 import Navbar from "./components/layout/Navbar";
 import Routes from "./components/routing/Routes";
 
-import {initHostEnv} from "./HostEnv";
+import {initHostEnv} from "./futuremodules/config/HostEnv";
 
-import {DBConfig} from "./DBConfig";
+import {DBConfig} from "./futuremodules/config/DBConfig";
 import {initDB} from "react-indexed-db";
 
 import "./App.css";

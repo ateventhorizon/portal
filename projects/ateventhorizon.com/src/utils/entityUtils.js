@@ -1,6 +1,5 @@
 import React from "react";
 
-export const GroupApp = "app";
 export const GroupGeom = "geom";
 export const GroupMaterial = "material";
 export const GroupImage = "image";
@@ -9,31 +8,14 @@ export const GroupScript = "script";
 export const GroupFont = "font";
 export const GroupUI = "ui";
 
-export const alphaBool = flag => {
-  return flag === true ? "true" : "false";
-};
-
-export const getFileName = pathname => {
-  const firstSplit = pathname.split("\\");
-  if (firstSplit.length) {
-    const fname = firstSplit.pop();
-    const secondSplit = fname.split("/");
-    if (secondSplit.length) {
-      return secondSplit.pop();
-    }
-  }
-
-  return pathname;
-};
-
-export const getFileNameOnlyNoExt = pathname => {
-  let ret = getFileName(pathname);
-  return ret.substring(0, ret.lastIndexOf(".")) || ret;
-};
-
-export const getFileNameExt = filename => {
-  return filename.split('.').pop().toLowerCase();
-};
+export const ScriptStrID = "Scripts";
+export const ObjectsStrID = "Objects";
+export const MaterialsStrID = "Materials";
+export const ImagesStrID = "Images";
+export const FontsStrID = "Fonts";
+export const GUIsStrID = "UIs";
+export const VectorsStrID = "Vectors";
+export const ColorsStrID = "Colors";
 
 
 export const checkCommonFileExtension = (group, ext) => {
@@ -66,38 +48,28 @@ export const checkCommonFileExtension = (group, ext) => {
 };
 
 export const groupHasCreateEditor = group => {
-  if (group !== "" && (group === GroupUI || group === GroupScript)) {
-    return true;
-  }
-  return false;
+  return group !== "" && (group === GroupUI || group === GroupScript);
+
 };
 
 export const groupHasImportFacility = group => {
-  if (group !== "" && group !== GroupScript) {
-    return true;
-  }
-  return false;
+  return group !== "" && group !== GroupScript;
+
 };
 
 export const groupHasUpdateFacility = (currEntity, group) => {
-  if (currEntity && group !== GroupScript) {
-    return true;
-  }
-  return false;
+  return !!(currEntity && group !== GroupScript);
+
 };
 
 export const groupHasMetadataSection = (currEntity, group) => {
-  if (currEntity && group !== GroupScript) {
-    return true;
-  }
-  return false;
+  return !!(currEntity && group !== GroupScript);
+
 };
 
 export const groupHasRenderToolbar = (currEntity, group) => {
-  if (currEntity && (group === GroupGeom || group === GroupMaterial)) {
-    return true;
-  }
-  return false;
+  return !!(currEntity && (group === GroupGeom || group === GroupMaterial));
+
 };
 
 export const checkFileExtensionsOnEntityGroup = (group, filename) => {

@@ -7,7 +7,7 @@ import {
   GroupProfile,
   GroupScript,
   GroupUI
-} from "../../../utils/utils";
+} from "../../../utils/entityUtils";
 import EntitiesThumbHandler from "./EntitiesThumbHandler";
 import EntityDragAndImport from "./EntityDragAndImport";
 import {useGlobal} from "reactn";
@@ -16,16 +16,15 @@ import {getEntitiesOfGroup} from "../../../futuremodules/entities/entitiesApiCal
 import {Currents, Entities} from "../../../globalstorage/GlobalStorage";
 import {setCurrentGroup, useGetCurrentGroup} from "../../../futuremodules/entities/entitiesAccessors";
 import {useGetProject} from "../../../futuremodules/auth/authAccessors";
-
-// const AppStrID = "Apps";
-const ScriptStrID = "Scripts";
-const ObjectsStrID = "Objects";
-const MaterialsStrID = "Materials";
-const ImagesStrID = "Images";
-const FontsStrID = "Fonts";
-const GUIsStrID = "UIs";
-const VectorsStrID = "Vectors";
-const ColorsStrID = "Colors";
+import {
+  ColorsStrID,
+  FontsStrID,
+  GUIsStrID,
+  ImagesStrID,
+  MaterialsStrID,
+  ObjectsStrID,
+  ScriptStrID, VectorsStrID
+} from "../../../utils/entityUtils";
 
 const EntityTypeTaskBar = () => {
   const apiEntities = useApi(Entities);

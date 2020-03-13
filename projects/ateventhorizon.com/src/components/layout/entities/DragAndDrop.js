@@ -1,6 +1,6 @@
 import React, {useCallback} from "react";
 import {useDropzone} from "react-dropzone";
-import {checkFileExtensionsOnEntityGroup, GroupImage} from "utils/utils";
+import {checkFileExtensionsOnEntityGroup, GroupImage} from "../../../utils/entityUtils";
 
 const DragAndDrop = props => {
 

@@ -1,6 +1,6 @@
 import React, {Fragment} from "react";
 import {decode} from "base64-arraybuffer";
-import {checkCommonFileExtension, entityTypeSelector} from "../../../utils/utils";
+import {checkCommonFileExtension, entityTypeSelector} from "../../../utils/entityUtils";
 import {
   useGetCurrentEntity,
   useGetCurrentGroup,

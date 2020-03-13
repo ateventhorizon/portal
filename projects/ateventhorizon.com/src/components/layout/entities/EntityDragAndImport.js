@@ -4,13 +4,16 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 
 import {
-  checkFileExtensionsOnEntityGroup,
   getFileNameExt,
   getFileNameOnlyNoExt,
+} from "../../../futuremodules/utils/utils";
+
+import {
+  checkFileExtensionsOnEntityGroup,
   GroupGeom,
   groupHasCreateEditor,
   groupHasImportFacility
-} from "../../../utils/utils";
+} from "../../../utils/entityUtils";
 
 import {useGlobal} from "reactn";
 import {alertWarning} from "../../../futuremodules/alerts/alerts";

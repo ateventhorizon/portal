@@ -1,6 +1,6 @@
 import React from "react";
 import DragAndDrop from "./DragAndDrop";
-import {GroupImage} from "../../../utils/utils";
+import {GroupImage} from "../../../utils/entityUtils";
 
 const MaterialParametersEditor = (props) => {
 

@@ -16,7 +16,7 @@ import {
   GroupMaterial,
   GroupScript,
   GroupUI
-} from "../../utils/utils";
+} from "../../utils/entityUtils";
 import {createPlaceHolder, getFullEntity} from "../../actions/entities";
 import {Redirect} from "react-router-dom";
 import {useGlobal} from "reactn";
