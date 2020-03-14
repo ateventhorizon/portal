@@ -13,8 +13,12 @@ import EntityDragAndImport from "./EntityDragAndImport";
 import {useGlobal} from "reactn";
 import {api, useApi} from "../../../futuremodules/api/apiEntryPoint";
 import {getEntitiesOfGroup} from "../../../futuremodules/entities/entitiesApiCalls";
-import {Currents, Entities} from "../../../globalstorage/GlobalStorage";
-import {setCurrentGroup, useGetCurrentGroup} from "../../../futuremodules/entities/entitiesAccessors";
+import {
+  Currents,
+  Entities,
+  setCurrentGroup,
+  useGetCurrentGroup
+} from "../../../futuremodules/entities/entitiesAccessors";
 import {useGetProject} from "../../../futuremodules/auth/authAccessors";
 import {
   ColorsStrID,
@@ -48,7 +52,7 @@ const EntityTypeTaskBar = () => {
     if (group === ColorsStrID) groupId = "color_scheme";
     if (currentGroup !== groupId) {
       setCurrentGroup(currents, groupId);
-      api( apiEntities, getEntitiesOfGroup, groupId, project);
+      await api( apiEntities, getEntitiesOfGroup, groupId, project);
       // groupSelected: payload,
       //   loading: true,
       //   currentTags: [],

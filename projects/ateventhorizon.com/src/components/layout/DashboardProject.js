@@ -20,8 +20,8 @@ import {
 import {createPlaceHolder, getFullEntity} from "../../actions/entities";
 import {Redirect} from "react-router-dom";
 import {useGlobal} from "reactn";
-import WasmCanvas from "react-wasm-canvas";
-import {ReactWasm} from "../../globalstorage/GlobalStorage";
+// import WasmCanvas, {ReactWasm} from "react-wasm-canvas";
+import WasmCanvas, {ReactWasm} from "../../futuremodules/reactwasmcanvas/localreacwasmcanvas";
 
 const containerClassFromGroup = (currEntity, group) => {
   switch (group) {

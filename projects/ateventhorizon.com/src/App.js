@@ -4,19 +4,13 @@ import Landing from "./components/layout/Landing";
 import Navbar from "./components/layout/Navbar";
 import Routes from "./components/routing/Routes";
 
-import {initHostEnv} from "./futuremodules/config/HostEnv";
-
-import {DBConfig} from "./futuremodules/config/DBConfig";
-import {initDB} from "react-indexed-db";
-
-import "./App.css";
-import {Auth, initGlobalStorage} from "./globalstorage/GlobalStorage";
 import {api, useApiSilent} from "./futuremodules/api/apiEntryPoint";
 import {loadUser} from "./futuremodules/auth/authApiCalls";
+import {initEH} from "./init";
+import {Auth} from "./futuremodules/auth/authAccessors";
+import "./App.css";
 
-initHostEnv();
-initGlobalStorage();
-initDB(DBConfig);
+initEH();
 
 const App = () => {
   const authApi = useApiSilent(Auth);

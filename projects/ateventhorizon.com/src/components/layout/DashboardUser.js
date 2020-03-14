@@ -26,7 +26,7 @@ const DashboardUser = () => {
 
   const [currentManagedProject, setCurrentManagedProject] = useState(null);
 
-  if (auth === null) {
+  if (auth === undefined) {
     return (<Redirect to="/"/>)
   }
   if (auth.project !== null) {
