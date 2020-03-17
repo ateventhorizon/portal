@@ -14,7 +14,7 @@ import {
   UPDATE_METADATA_LIST_PARTIAL_SEARCH
 } from "./types";
 import store from "../store";
-import {wscSend} from "../utils/webSocketClient";
+import {wscSend} from "../futuremodules/auth/websockets";
 
 export const replaceMaterial = entity => async dispatch => {
   try {

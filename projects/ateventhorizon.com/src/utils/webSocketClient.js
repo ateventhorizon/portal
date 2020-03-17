@@ -1,20 +1,7 @@
-import {w3cwebsocket as W3CWebSocket} from "websocket";
 import store from "../store";
 import {ADD_ENTITY, LOADING_FINISHED} from "../actions/types";
 import {getFullEntity} from "../actions/entities";
-
-let webSocketClient = null;
-
-const wscSendInternal = (message, obj) => {
-  if (webSocketClient.readyState === webSocketClient.OPEN) {
-    const sd = {
-      msg: message,
-      data: obj
-    };
-    // console.log("[WSS] Sending: ", sd);
-    webSocketClient.send(JSON.stringify(sd));
-  }
-};
+import {webSocketClientInstance, wscSend} from "../futuremodules/auth/websockets";
 
 export const updateAsset = (currentEntityData, currentEntity) => {
   try {
@@ -40,21 +27,15 @@ export const placeHolderAsset = group => {
   }
 };
 
-export const wscConnect = session => {
-  const webSocketServerAddress = `wss://${process.env.REACT_APP_EH_CLOUD_HOST}/wss/?s=${session}`;
-
-  webSocketClient = new W3CWebSocket(webSocketServerAddress);
-  webSocketClient.onopen = () => {
-    console.log("[WSS-REACT]WebSocket Client Connected");
-  };
-  webSocketClient.onmessage = message => {
+export const wscMessages = () => {
+  webSocketClientInstance.onmessage = message => {
     let mdata = JSON.parse(message.data);
     if ( mdata.msg.startsWith("EntityAdded") ) {
       const state = store.getState();
       const entity = mdata.data.fullDocument;
       if ( entity && state.entities.groupSelected === entity.group) {
-          store.dispatch({type: ADD_ENTITY, payload: entity});
-          store.dispatch(getFullEntity(entity));
+        store.dispatch({type: ADD_ENTITY, payload: entity});
+        store.dispatch(getFullEntity(entity));
       }
       store.dispatch({type: LOADING_FINISHED, payload: null});
     }
@@ -62,16 +43,4 @@ export const wscConnect = session => {
     //   setEntityNodes(mdata.data);
     // }
   };
-};
-
-export const wscClose = user => {
-  // wscSendInternal("Logout", `${user.name} has logged out!`);
-  if (webSocketClient) {
-    webSocketClient.close();
-    webSocketClient = null;
-  }
-};
-
-export const wscSend = (message, obj) => {
-  wscSendInternal(message, obj);
-};
+}

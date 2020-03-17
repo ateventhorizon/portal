@@ -6,13 +6,14 @@ import DashboardUser from "../layout/DashboardUser";
 import DashboardProject from "../layout/DashboardProject";
 import NotFound from "../layout/NotFound";
 import {EHAlert} from "../../futuremodules/alerts/alerts";
+import {wscMessages} from "../../utils/webSocketClient";
 
 const Routes = () => {
   return (
     <Fragment>
       <Switch>
-        <Route exact path="/register" component={Register}/>
-        <Route exact path="/login" component={Login}/>
+        <Route exact path="/register" component={Register} websocketMessageHandler={wscMessages}/>
+        <Route exact path="/login" component={Login} websocketMessageHandler={wscMessages}/>
         <Route exact path="/dashboarduser" component={DashboardUser}/>
         <Route exact path="/dashboardproject" component={DashboardProject}/>
         <Route component={NotFound}/>
